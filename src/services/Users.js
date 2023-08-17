@@ -1,4 +1,4 @@
-import http from "../plugins/axios";
+import http from "../../public/plugins/axios";
 
 export default {
   read: () => {

@@ -66,9 +66,9 @@
           </v-col>
         </div>
         <v-col
-          cols="10"
+          cols="12"
           xs="12"
-          sm="6"
+          sm="5"
           md="6"
           lg="6"
           class="mr-auto ml-auto mr-sm-2 mb-n6"
@@ -79,11 +79,10 @@
             v-model="search"
             label="Pesquisar"
             prepend-inner-icon="mdi-magnify"
-            no-data-text="Nenhuma editora encontrado"
+            no-data-text="Nenhum livro encontrado"
           ></v-text-field>
         </v-col>
       </v-row>
-
       <v-data-table
         :headers="headers"
         :items="filteredBooks"
@@ -96,7 +95,7 @@
           itemsPerPageText: 'Linhas por página',
         }"
         mobile-breakpoint="820"
-        class="elevation-1 align-center px-4 py-4"
+        class="align-center px-4 py-4"
         no-data-text="Nenhum Livro encontrado"
       >
         <template v-slot:[`item.actions`]="{ item }">
@@ -541,7 +540,7 @@ export default {
 </script>
 
 <style scoped>
-@media (max-width: 1000px) {
+@media (max-width: 1600px) {
   ::v-deep .v-data-table > .v-data-table__wrapper > table > tbody > tr > td,
   ::v-deep .v-data-table > .v-data-table__wrapper > table > tbody > tr > th,
   ::v-deep .v-data-table > .v-data-table__wrapper > table > thead > tr > td,

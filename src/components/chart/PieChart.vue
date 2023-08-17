@@ -1,50 +1,94 @@
 <template>
-  <v-flex>
+  <v-flex width="100">
     <div class="chart_container">
-      <div class="title text-center">Livros disponíveis</div>
-      <canvas ref="myPieChart" width="470" height="230"></canvas>
+      <div class="title text-center">Status de alugueis</div>
+      <canvas ref="myPieChart"></canvas>
     </div>
   </v-flex>
 </template>
 
 <script>
-import { Chart } from "chart.js";
-import { PieController, CategoryScale } from "chart.js";
-
+import Chart from "chart.js/auto";
+import Rentals from "@/services/Rentals";
 export default {
+  data() {
+    return {
+      statusRentals: [],
+    };
+  },
   mounted() {
-    CategoryScale.register();
-    PieController.register();
-
-    this.initChart();
+    this.fetchStatus();
   },
   methods: {
-    initChart() {
-      const ctx = this.$refs.myPieChart.getContext("2d");
-      new Chart(ctx, {
+    parseDateISO(date) {
+      const [dd, mm, yyyy] = date.split("/");
+      return `${yyyy}-${mm}-${dd}`;
+    },
+    async fetchStatus() {
+      try {
+        const rentals = await Rentals.read();
+        const status = {
+          "No prazo": 0,
+          "Com atraso": 0,
+          "Não devolvido": 0,
+        };
+
+        rentals.data.forEach((rental) => {
+          if (rental.data_devolucao != null) {
+            const devolucaoDate = this.parseDateISO(rental.data_devolucao);
+            const previsaoDate = this.parseDateISO(rental.data_previsao);
+            if (devolucaoDate > previsaoDate) {
+              status["Com atraso"]++;
+            } else {
+              status["No prazo"]++;
+            }
+          } else {
+            status["Não devolvido"]++;
+          }
+        });
+
+        const statusCountArray = Object.entries(status);
+
+        // statusCountArray.sort((a, b) => b[1] - a[1]);
+
+        this.statusRentals = statusCountArray;
+
+        this.renderPieChart();
+      } catch (error) {
+        console.error("Erro ao buscar dados:", error);
+      }
+    },
+    renderPieChart() {
+      if (!this.statusRentals) return;
+
+      const labels = this.statusRentals.map((item) => item[0]);
+      const data = this.statusRentals.map((item) => item[1]);
+      console.log(labels);
+      const ctz = this.$refs.myPieChart.getContext("2d");
+      new Chart(ctz, {
         type: "pie",
         data: {
-          labels: ["Livro1", "Livro2", "Livro3", "Livro4", "Livro5"],
+          labels: labels,
           datasets: [
             {
-              label: "# Livro1",
-              data: [15, 10, 5, 3, 2],
+              label: "",
+              data: data,
               backgroundColor: [
-                "rgb(255, 99, 132)",
                 "rgb(54, 162, 235)",
+                "rgb(255, 99, 132)",
                 "rgb(255, 206, 86)",
                 "rgb(75, 192, 192)",
                 "rgb(153, 102, 255)",
               ],
               borderColor: [
-                "rgba(255, 99, 132, 1)",
                 "rgba(54, 162, 235, 1)",
+                "rgba(255, 99, 132, 1)",
                 "rgba(255, 206, 86, 1)",
                 "rgba(75, 192, 192, 1)",
                 "rgba(153, 102, 255, 1)",
                 "rgba(255, 159, 64, 1)",
               ],
-              borderWidth: 0,
+              borderWidth: 1,
             },
           ],
         },
@@ -52,6 +96,7 @@ export default {
           scales: {
             y: {
               beginAtZero: true,
+              display: false,
             },
           },
         },
@@ -61,18 +106,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.title {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-
-.chart_container {
-  text-align: center;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-}
-</style>
+<style></style>

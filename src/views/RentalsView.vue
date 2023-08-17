@@ -67,7 +67,7 @@
           </v-col>
         </div>
         <v-col
-          cols="10"
+          cols="12"
           xs="12"
           sm="5"
           md="6"
@@ -80,11 +80,14 @@
             v-model="search"
             label="Pesquisar"
             prepend-inner-icon="mdi-magnify"
+            no-data-text="Nenhum aluguel encontrado"
+            @input="updateItemsPerPage"
           ></v-text-field>
         </v-col>
       </v-row>
 
       <v-data-table
+      style="overflow-x: hidden;"
         :headers="headers"
         :items="filteredRentals"
         :sort-by="['id']"
@@ -93,17 +96,21 @@
         :items-per-page="itemsPerPage"
         :header-props="headerProps"
         :footer-props="{
-          itemsPerPageOptions: [5, 10, 25, 50],
+          itemsPerPageOptions: [5, 10, 25, -1],
           itemsPerPageText: 'Linhas por página',
         }"
-        mobile-breakpoint="820"
-        class="elevation-1 align-center"
+        mobile-breakpoint="880"
+        class="align-center px-4 py-4"
         no-data-text="Nenhum Aluguel encontrado"
       >
         <template v-slot:[`item.actions`]="{ item }">
           <v-icon
             variant="plain"
-            v-if="item.status === 'Não devolvido' && date >= item.data_previsao"
+            v-if="
+              item.status === 'Não devolvido' &&
+              parseDateISO(item.data_previsao) <=
+                parseDateISO(item.data_aluguel)
+            "
             color="warning"
             @click="openModalReturn(item)"
           >
@@ -124,7 +131,7 @@
         </template>
         <template v-slot:[`item.status`]="{ item }">
           <v-chip outlined :color="getStatusColorAndName(item).color" dark>
-            {{ getStatusColorAndName(item).name }}
+            {{ (item.status = getStatusColorAndName(item).name) }}
           </v-chip>
         </template>
       </v-data-table>
@@ -169,7 +176,7 @@
                 >
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field
-                    disabled
+                      disabled
                       v-model="dateFormatted"
                       label="Data de aluguel"
                       hint="DD/MM/YYYY format"
@@ -204,7 +211,7 @@
                       :rules="previsaoDateRules"
                       persistent-hint
                       append-icon="mdi-calendar"
-                      @blur="formattedprevisaoDate = formatDate(previsaoDate)"
+                      @blur="formattedPrevisaoDate = formatDate(previsaoDate)"
                       v-bind="attrs"
                       v-on="on"
                     ></v-text-field>
@@ -252,16 +259,17 @@ export default {
     const futureDate = new Date(
       currentDate.getTime() + 30 * 24 * 60 * 60 * 1000
     );
-    const formattedprevisaoDate = futureDate.toLocaleDateString("pt-BR");
+    const formattedPrevisaoDate = futureDate.toLocaleDateString("pt-BR");
     return {
       date: currentDate.toISOString().substr(0, 10),
       date2: futureDate.toISOString().substr(0, 10),
       rentals: [],
       dateFormatted: formattedDate,
-      previsaoDateFormatted: formattedprevisaoDate,
+      previsaoDateFormatted: formattedPrevisaoDate,
       availableUsers: [],
       availableBooks: [],
       search: "",
+      selectedStatus: "",
       menu1: "",
       menu2: "",
       selectedBook: null,
@@ -286,12 +294,12 @@ export default {
         },
         {
           text: "Livro",
-          value: "livro_id.nome",
+          value: "livro_id",
           class: "text-md-body-1 font-weight-bold ",
         },
         {
           text: "Usuário",
-          value: "usuario_id.nome",
+          value: "usuario_id",
           class: "text-md-body-1 font-weight-bold ",
         },
         {
@@ -313,6 +321,7 @@ export default {
           text: "Status",
           value: "status",
           align: "center",
+          sortable: false,
           class: "text-md-body-1 font-weight-bold ",
         },
         {
@@ -328,22 +337,29 @@ export default {
       dateFormattedRules: [(v) => !!v || "A data de aluguel é obrigatório"],
       previsaoDateRules: [(v) => !!v || "A data de previsão é obrigatório"],
       currentPage: 5,
-      itemsPerPage: 1,
+      itemsPerPage: -1,
     };
   },
   created() {
     this.fetchRentals();
+
+    this.fetchRentals().then(() => {
+      setTimeout(() => {
+        this.itemsPerPage = 5;
+      }, 1);
+    });
   },
   computed: {
-    computedDateFormatted() {
-      return this.formatDate(this.date);
-    },
     filteredRentals() {
       const searchValue = this.search.toLowerCase();
+      const statusValue = this.selectedStatus.toLowerCase();
       return this.rentals.filter((aluguel) => {
         for (const prop in aluguel) {
           const propValue = aluguel[prop].toString().toLowerCase();
-          if (propValue.includes(searchValue)) {
+          if (
+            propValue.includes(searchValue) &&
+            propValue.includes(statusValue)
+          ) {
             return true;
           }
         }
@@ -351,9 +367,9 @@ export default {
       });
     },
     totalPages() {
-      return Math.ceil(this.filteredRentals.length / this.itemsPerPage);
+      return Math.ceil(this.paginatedRentals.length / this.itemsPerPage);
     },
-    paginatedEditoras() {
+    paginatedRentals() {
       const startIndex = (this.currentPage - 1) * this.itemsPerPage;
       const endIndex = startIndex + this.itemsPerPage;
       return this.filteredRentals.slice(startIndex, endIndex);
@@ -367,10 +383,10 @@ export default {
       this.previsaoDateFormatted = this.formatDate(newValue);
     },
     date() {
-      this.aluguelDate = this.parseDate(this.dateFormatted);
+      this.aluguelDate = this.parseDateISO(this.dateFormatted);
     },
     date2() {
-      this.previsaoDate = this.parseDate(this.previsaoDateFormatted);
+      this.previsaoDate = this.parseDateISO(this.previsaoDateFormatted);
     },
   },
 
@@ -392,9 +408,13 @@ export default {
       return `${yyyy}-${mm}-${dd}`;
     },
     getStatusColorAndName(item) {
-      if (item.data_devolucao != "Não devolvido") {
-        const devolucaoDate = this.parseDateISO(item.data_devolucao);
-        const previsaoDate = this.parseDateISO(item.data_previsao);
+      const allRentals = this.rentals; // Todos os registros de aluguel
+
+      const rentalInList = allRentals.find((r) => r.id === item.id);
+
+      if (rentalInList.data_devolucao !== "Não devolvido") {
+        const devolucaoDate = this.parseDateISO(rentalInList.data_devolucao);
+        const previsaoDate = this.parseDateISO(rentalInList.data_previsao);
         if (devolucaoDate > previsaoDate) {
           return { color: "error", name: "Com atraso" };
         } else {
@@ -404,7 +424,6 @@ export default {
         return { color: "primary", name: "Não devolvido" };
       }
     },
-
     /* ===== CRUD ===== */
 
     /* READ */
@@ -425,8 +444,8 @@ export default {
 
         this.rentals = rentalsResponse.data.map((rental) => ({
           id: rental.id,
-          livro_id: rental.livro_id,
-          usuario_id: rental.usuario_id,
+          livro_id: rental.livro_id.nome,
+          usuario_id: rental.usuario_id.nome,
           data_aluguel: this.formatDate(rental.data_aluguel),
           data_devolucao: rental.data_devolucao
             ? this.formatDate(rental.data_devolucao)
@@ -520,11 +539,12 @@ export default {
       }
     },
 
+    /* DELETE */
     openModalDelete(aluguel) {
       this.updateRental = { ...aluguel };
       Swal.fire({
         icon: "warning",
-        title: `Deseja excluir o Aluguel do </br> ${aluguel.livro_id.nome} ? `,
+        title: `Deseja excluir o Aluguel do </br> ${aluguel.livro_id} ? `,
         showCancelButton: true,
         confirmButtonText: "Excluir!",
         cancelButtonText: "Cancelar",
@@ -536,65 +556,84 @@ export default {
         }
       });
     },
-    submitDelete(rental) {
-      if (rental.livro_id && rental.usuario_id) {
+    async submitDelete(rental) {
+      try {
+        if (!rental.livro_id || !rental.usuario_id) {
+          console.error("ID de livro_id ou usuario_id não definido.");
+          return;
+        }
+
+        const selectedBook = this.availableBooks.find(
+          (book) => book.nome === rental.livro_id
+        );
+        const selectedUser = this.availableUsers.find(
+          (user) => user.nome === rental.usuario_id
+        );
+
         const deleteRental = {
           id: rental.id,
-          livro_id: rental.livro_id,
-          usuario_id: rental.usuario_id,
-          data_aluguel: this.parseDate(rental.data_aluguel),
-          data_previsao: this.parseDate(rental.data_previsao),
+          livro_id: selectedBook,
+          usuario_id: selectedUser,
+          data_aluguel: this.parseDateISO(rental.data_aluguel),
+          data_previsao: this.parseDateISO(rental.data_previsao),
           data_devolucao:
-            rental.data_devolucao !== "Não devolvido" ? null : null,
+            rental.data_devolucao !== "Não devolvido"
+              ? rental.data_devolucao
+              : null,
         };
 
         console.log("Resposta da Exclusão:", deleteRental);
-        Rentals.delete(deleteRental)
-          .then((response) => {
-            if (response.status === 200) {
-              Swal.fire({
-                icon: "success",
-                text: "Aluguel Excluído com Sucesso!",
-                showConfirmButton: false,
-                timer: 2000,
-                toast: true,
-                position: "top-end",
-                timerProgressBar: true,
-              });
-              this.fetchRentals();
-            } else {
-              Swal.fire({
-                title: "Aluguel não deletado",
-                text: response.data.error,
-                icon: "info",
-                timer: 2000,
-                toast: true,
-                position: "top-end",
-                timerProgressBar: true,
-              });
-            }
-          })
-          .catch((error) => {
-            Swal.fire({
-              icon: "error",
-              title: "Erro",
-              text: error.response.data.error,
-              timer: 2000,
-              toast: true,
-              position: "top-end",
-              timerProgressBar: true,
-            });
+
+        const response = await Rentals.delete(deleteRental);
+
+        if (response.status === 200) {
+          Swal.fire({
+            icon: "success",
+            text: "Aluguel Excluído com Sucesso!",
+            showConfirmButton: false,
+            timer: 2000,
+            toast: true,
+            position: "top-end",
+            timerProgressBar: true,
           });
-      } else {
-        console.error("ID de livro_id ou usuario_id não definido.");
+          this.fetchRentals();
+        } else {
+          Swal.fire({
+            title: "Aluguel não deletado",
+            text: response.data.error,
+            showConfirmButton: false,
+            icon: "info",
+            timer: 2000,
+            toast: true,
+            position: "top-end",
+            timerProgressBar: true,
+          });
+        }
+      } catch (error) {
+        console.error("Erro ao excluir aluguel:", error);
+
+        Swal.fire({
+          icon: "error",
+          title: "Erro",
+          text: "Ocorreu um erro ao excluir o aluguel.",
+          showConfirmButton: false,
+          timer: 2000,
+          toast: true,
+          position: "top-end",
+          timerProgressBar: true,
+        });
       }
     },
 
     async openModalReturn(rental) {
       this.updateRental = { ...rental };
       this.selectedReantalId = this.updateRental.id;
-      this.selectedBook = this.updateRental.livro_id;
-      this.selectedUser = this.updateRental.usuario_id;
+      this.selectedBook = this.availableBooks.find(
+        (book) => book.nome === rental.livro_id
+      );
+      this.selectedUser = this.availableUsers.find(
+        (user) => user.nome === rental.usuario_id
+      );
       this.aluguelDate = this.updateRental.data_aluguel;
       this.previsaoDate = this.updateRental.data_previsao;
       this.devolucaoDate = this.updateRental.data_devolucao;
@@ -656,3 +695,15 @@ export default {
   },
 };
 </script>
+<style scoped>
+@media (max-width: 1600px) {
+  ::v-deep .v-data-table > .v-data-table__wrapper > table > tbody > tr > td,
+  ::v-deep .v-data-table > .v-data-table__wrapper > table > tbody > tr > th,
+  ::v-deep .v-data-table > .v-data-table__wrapper > table > thead > tr > td,
+  ::v-deep .v-data-table > .v-data-table__wrapper > table > thead > tr > th,
+  ::v-deep .v-data-table > .v-data-table__wrapper > table > tfoot > tr > td,
+  ::v-deep .v-data-table > .v-data-table__wrapper > table > tfoot > tr > th {
+    padding: 0px 4px !important;
+  }
+}
+</style>

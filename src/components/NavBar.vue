@@ -23,7 +23,7 @@
       <v-list flat>
         <v-list-item router-link to="/" active-class="border">
           <v-list-item-action class="mr-4">
-            <v-icon>dashboard</v-icon>
+            <v-icon>mdi-view-dashboard</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>Dashboard</v-list-item-title>

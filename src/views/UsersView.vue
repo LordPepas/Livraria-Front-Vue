@@ -65,7 +65,7 @@
           </v-col>
         </div>
         <v-col
-          cols="10"
+          cols="12"
           xs="12"
           sm="5"
           md="6"
@@ -78,6 +78,7 @@
             v-model="search"
             label="Pesquisar"
             prepend-inner-icon="mdi-magnify"
+            no-data-text="Nenhum usuário encontrado"
           ></v-text-field>
         </v-col>
       </v-row>
@@ -98,7 +99,7 @@
           itemsPerPageText: 'Linhas por página',
         }"
         mobile-breakpoint="820"
-        class="elevation-1 align-center px-4 py-4"
+        class="align-center px-4 py-4"
         no-data-text="Nenhum Cliente encontrado"
       >
         <template v-slot:[`item.actions`]="{ item }">

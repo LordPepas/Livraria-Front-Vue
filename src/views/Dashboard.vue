@@ -1,54 +1,88 @@
 <template>
-  <v-app>
-    <v-divider color="white" class="mt-1" dark></v-divider>
-    <v-container class="dash">
+  <div class="d-flex flex-column justify-end align-end" style="max-width: 1300px; margin: auto;">
+    <v-divider color="white" dark></v-divider>
+    <v-container>
       <v-row>
-        <v-col cols="12" sm="12" class="mt-8">
-          <v-row class="px-5 mt-n6 ml-5">
-            <v-col cols="12" sm="3" v-for="list in lists" :key="list.title">
+       <v-col cols="12" sm="12" class="lg:mt-4 md:mt-1">
+          <v-row class="px-5 mt-n6 centro">
+            <v-col
+              cols="12"
+              md="6"
+              lg="3"
+              class="centro"
+              v-for="list in lists"
+              :key="list.title"
+            >
               <v-card
-                align="center"
                 color="#f9faf"
                 class="rounded-circle border pt-10"
-                width="150"
-                height="150"
-                flat
+                width="130"
+                height="130"
+               
               >
                 <v-icon size="40" color="indigo darken-3">{{
                   list.icon
                 }}</v-icon>
-                <v-card-text class="grey--text text-lg-h7">{{
-                  list.title
-                }}</v-card-text>
+                <v-card-text
+                  class="text-lg-h7"
+                  color="indigo darken-3"
+                  size="40"
+                  >{{ list.title }}</v-card-text
+                >
                 <v-btn
                   absolute
                   color="indigo darken-3"
-                  class="white--text"
+                  class="white--text center-button"
                   fab
                   left
-                  top="50%"
-                  transform="translateY(-50%)"
+                  style="z-index: 3;"
                 >
                   {{ list.count }}
                 </v-btn>
               </v-card>
             </v-col>
           </v-row>
-          <v-row class="mt-n5">
-            <v-col cols="12" sm="6">
-              <div class="mt-7">
+          <v-row class="mt-5">
+            <v-col cols="6"  sm="12" md="6" style="margin: auto">
+              <div
+                class="mt-3 card-graph"
+                style="
+                  width: 98%;
+                  min-width: 280px;
+                  max-width: 480px;
+                  margin: auto;
+                "
+              >
                 <LineChart />
               </div>
             </v-col>
-            <v-col cols="12" sm="6">
-              <v-card class="mt-7 card" style="width: 100%;" elevation="3">
-                <v-card-title class="centro">
-                  <v-icon>mdi-book</v-icon>
+            <v-col cols="12" md="6">
+              <v-card
+                class="mt-2 card-graph"
+                style="
+                  width: 80%;
+                  max-width: 480px;
+                  min-width: 280px;
+                  margin: auto;
+                  height: 110px;
+                "
+              >
+                <v-card-title class="centro mt-n5" color="indigo darken-3">
+                  <v-icon color="indigo darken-3">mdi-book</v-icon>
                   Último livro alugado:
                 </v-card-title>
-                <v-card-content class="centro"></v-card-content>
+                <v-card-text class="centro text-subtitle-1">{{
+                  lastRental
+                }}</v-card-text>
               </v-card>
-              <div class="mt-7">
+              <div
+                class="mt-4 card-graph"
+                style="
+                  width: 69%;
+                  max-width: 350px;
+                  margin: auto;
+                "
+              >
                 <PieChart />
               </div>
             </v-col>
@@ -56,43 +90,79 @@
         </v-col>
       </v-row>
     </v-container>
-  </v-app>
+  </div>
 </template>
 
 <script>
 import PieChart from "../components/chart/PieChart.vue";
 import LineChart from "../components/chart/LineChart.vue";
+import Publishers from "@/services/Publishers";
+import Users from "@/services/Users";
+import Books from "@/services/Books";
+import Rentals from "@/services/Rentals";
 
 export default {
   name: "DashboardView",
-  data: () => ({
-    lists: [
-      {
-        icon: "mdi-account-group",
-        title: "Clientes",
-        count: 21,
-      },
-      {
-        icon: "mdi-domain",
-        title: "Editoras",
-        count: 21,
-      },
-      {
-        icon: "mdi-book-multiple",
-        title: "Livros",
-        count: 34,
-      },
-      {
-        icon: "mdi-calendar-text-outline",
-        title: "Aluguéis",
-        count: 31,
-      },
-    ],
-  }),
-
+  data() {
+    return {
+      lastRental: null,
+      lists: [
+        {
+          icon: "mdi-account-group",
+          title: "Clientes",
+          count: 0,
+        },
+        {
+          icon: "mdi-domain",
+          title: "Editoras",
+          count: 0,
+        },
+        {
+          icon: "mdi-book-open-page-variant",
+          title: "Livros",
+          count: 0,
+        },
+        {
+          icon: "mdi-book-account",
+          title: "Aluguéis",
+          count: 0,
+        },
+      ],
+    };
+  },
   components: {
     LineChart,
     PieChart,
+  },
+
+  methods: {
+    async fetchData() {
+      try {
+        const [users, publishers, books, rentals] = await Promise.all([
+          Users.read(),
+          Publishers.read(),
+          Books.read(),
+          Rentals.read(),
+        ]);
+
+        this.lists[0].count = users.data.length;
+        this.lists[1].count = publishers.data.length;
+        this.lists[2].count = books.data.length;
+        this.lists[3].count = rentals.data.length;
+
+        const lastRental = rentals.data.reduce((prev, current) => {
+          return prev.id < current.id ? current : prev;
+        });
+        this.lastRental = lastRental
+          ? lastRental.livro_id.nome
+          : "Não há registros de aluguéis";
+      } catch (error) {
+        console.error("Erro ao buscar dados:", error);
+      }
+    },
+  },
+  mounted() {
+    this.fetchData();
   },
 };
 </script>
@@ -101,7 +171,10 @@ export default {
 .border {
   border: 2px solid #2e8faf !important;
 }
-
+.center-button {
+  top: 50%;
+  transform: translateY(-50%);
+}
 .v-btn--fab.v-size--default.v-btn--absolute.v-btn--top {
   top: 65px !important;
 }
@@ -111,20 +184,16 @@ export default {
   left: -28px !important;
 }
 
-.card {
-  height: 120px;
-  border: 1px solid;
+.card-graph {
+  border: 1.5px solid #1565c0;
+  padding: 20px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
 }
 
 .centro {
   display: flex;
   text-align: center;
   justify-content: center;
-}
-
-.dash {
-  border: 1px solid #eeee;
-  border-radius: 3px;
-  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
 }
 </style>

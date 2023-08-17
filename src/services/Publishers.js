@@ -1,4 +1,4 @@
-import http from "../plugins/axios";
+import http from "../../public/plugins/axios";
 
 export default {
   read: () => {
@@ -11,6 +11,6 @@ export default {
     return http.put("editora/", editora);
   },
   delete: (editora) => {
-    return http.delete('editora', { data : editora });
+    return http.delete("editora", { data: editora });
   },
 };
