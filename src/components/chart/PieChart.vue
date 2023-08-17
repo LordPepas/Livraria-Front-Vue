@@ -1,7 +1,7 @@
 <template>
   <v-flex width="100">
     <div class="chart_container">
-      <div class="title text-center">Status de alugueis</div>
+      <div class="title text-center">Status de Aluguéis </div>
       <canvas ref="myPieChart"></canvas>
     </div>
   </v-flex>

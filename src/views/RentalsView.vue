@@ -81,7 +81,7 @@
             label="Pesquisar"
             prepend-inner-icon="mdi-magnify"
             no-data-text="Nenhum aluguel encontrado"
-            @input="updateItemsPerPage"
+           
           ></v-text-field>
         </v-col>
       </v-row>
@@ -408,8 +408,7 @@ export default {
       return `${yyyy}-${mm}-${dd}`;
     },
     getStatusColorAndName(item) {
-      const allRentals = this.rentals; // Todos os registros de aluguel
-
+      const allRentals = this.rentals;
       const rentalInList = allRentals.find((r) => r.id === item.id);
 
       if (rentalInList.data_devolucao !== "Não devolvido") {
@@ -447,11 +446,10 @@ export default {
           livro_id: rental.livro_id.nome,
           usuario_id: rental.usuario_id.nome,
           data_aluguel: this.formatDate(rental.data_aluguel),
+          data_previsao: this.formatDate(rental.data_previsao),
           data_devolucao: rental.data_devolucao
             ? this.formatDate(rental.data_devolucao)
             : "Não devolvido",
-
-          data_previsao: this.formatDate(rental.data_previsao),
         }));
       } catch (error) {
         console.error("Erro ao buscar informações:", error);
@@ -495,16 +493,12 @@ export default {
             const selectedUser = this.availableUsers.find(
               (user) => user.nome === this.selectedUser
             );
-            if (!selectedUser) {
-              throw new Error("Usuário selecionado não encontrado.");
-            }
             const newRental = {
               livro_id: selectedBook,
               usuario_id: selectedUser,
               data_aluguel: this.aluguelDate,
               data_previsao: this.previsaoDate,
             };
-
             console.log(newRental);
             const response = await Rentals.create(newRental);
             this.rentals.push({
@@ -587,6 +581,7 @@ export default {
         const response = await Rentals.delete(deleteRental);
 
         if (response.status === 200) {
+          this.fetchRentals();
           Swal.fire({
             icon: "success",
             text: "Aluguel Excluído com Sucesso!",
@@ -596,7 +591,6 @@ export default {
             position: "top-end",
             timerProgressBar: true,
           });
-          this.fetchRentals();
         } else {
           Swal.fire({
             title: "Aluguel não deletado",
@@ -667,6 +661,8 @@ export default {
               return rental;
             }
           });
+          this.fetchRentals();
+          this.handleCancel();
           await Swal.fire({
             icon: "success",
             title: "Livro Devolvido com Sucesso!",
@@ -676,8 +672,6 @@ export default {
             timer: 2000,
             timerProgressBar: true,
           });
-          this.handleCancel();
-          this.fetchRentals();
         } catch (error) {
           await Swal.fire({
             icon: "info",

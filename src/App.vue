@@ -41,7 +41,7 @@ export default {
 
 <style>
 .crud {
-  width: 80vw;
+  width: 90vw;
   margin: auto;
   margin-top: 30px;
 }

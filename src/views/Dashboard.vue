@@ -1,15 +1,18 @@
 <template>
-  <div class="d-flex flex-column justify-end align-end" style="max-width: 1300px; margin: auto;">
+  <div
+    class="d-flex flex-column justify-end align-end"
+    style="max-width: 1300px; margin: auto"
+  >
     <v-divider color="white" dark></v-divider>
     <v-container>
       <v-row>
-       <v-col cols="12" sm="12" class="lg:mt-4 md:mt-1">
-          <v-row class="px-5 mt-n6 centro">
+        <v-col cols="12" sm="12" class="lg:mt-4 md:mt-1">
+          <v-row class="px-5 mt-n6 center">
             <v-col
               cols="12"
               md="6"
               lg="3"
-              class="centro"
+              class="center"
               v-for="list in lists"
               :key="list.title"
             >
@@ -18,24 +21,21 @@
                 class="rounded-circle border pt-10"
                 width="130"
                 height="130"
-               
               >
-                <v-icon size="40" color="indigo darken-3">{{
-                  list.icon
-                }}</v-icon>
-                <v-card-text
-                  class="text-lg-h7"
-                  color="indigo darken-3"
-                  size="40"
-                  >{{ list.title }}</v-card-text
-                >
+                <v-icon size="40" color="teal darken-3">{{ list.icon }}</v-icon>
+                <v-card-text class="text-lg-h7 mt-n3" size="40">
+                  <span class="blue-grey--text font-weight-medium">{{
+                    list.title
+                  }}</span>
+                </v-card-text>
+
                 <v-btn
                   absolute
-                  color="indigo darken-3"
+                  color="teal darken-3"
                   class="white--text center-button"
                   fab
                   left
-                  style="z-index: 3;"
+                  style="z-index: 3"
                 >
                   {{ list.count }}
                 </v-btn>
@@ -43,7 +43,7 @@
             </v-col>
           </v-row>
           <v-row class="mt-5">
-            <v-col cols="6"  sm="12" md="6" style="margin: auto">
+            <v-col cols="6" sm="12" md="6" style="margin: auto">
               <div
                 class="mt-3 card-graph"
                 style="
@@ -67,21 +67,19 @@
                   height: 110px;
                 "
               >
-                <v-card-title class="centro mt-n5" color="indigo darken-3">
-                  <v-icon color="indigo darken-3">mdi-book</v-icon>
+                <v-card-title class="center mt-n5" color="teal darken-3">
+                  <v-icon color="teal darken-3">mdi-book</v-icon>
                   Último livro alugado:
                 </v-card-title>
-                <v-card-text class="centro text-subtitle-1">{{
-                  lastRental
-                }}</v-card-text>
+                <v-card-text
+                  class="text-h6  mt-n2 center blue-grey--text font-weight-medium"
+                >
+                  {{ lastRental }}
+                </v-card-text>
               </v-card>
               <div
                 class="mt-4 card-graph"
-                style="
-                  width: 69%;
-                  max-width: 350px;
-                  margin: auto;
-                "
+                style="width: 69%; max-width: 350px; margin: auto"
               >
                 <PieChart />
               </div>
@@ -169,7 +167,7 @@ export default {
 
 <style scoped>
 .border {
-  border: 2px solid #2e8faf !important;
+  border: 2px solid #0097a7 !important;
 }
 .center-button {
   top: 50%;
@@ -185,15 +183,15 @@ export default {
 }
 
 .card-graph {
-  border: 1.5px solid #1565c0;
+  border: 1.5px solid #0097a7;
   padding: 20px;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
   border-radius: 5px;
 }
 
-.centro {
+.center {
   display: flex;
-  text-align: center;
   justify-content: center;
+  text-align: center;
 }
 </style>
