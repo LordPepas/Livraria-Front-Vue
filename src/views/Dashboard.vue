@@ -9,7 +9,7 @@
         <v-col cols="12" sm="12" class="lg:mt-4 md:mt-1">
           <v-row class="px-5 mt-n6 center">
             <v-col
-              cols="12"
+              cols="6"
               md="6"
               lg="3"
               class="center"
@@ -43,7 +43,7 @@
             </v-col>
           </v-row>
           <v-row class="mt-5">
-            <v-col cols="6" sm="12" md="6" style="margin: auto">
+            <v-col cols="6" xs="12"  style="margin: auto;">
               <div
                 class="mt-3 card-graph"
                 style="
