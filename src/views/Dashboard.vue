@@ -37,7 +37,7 @@
                   left
                   style="z-index: 3"
                 >
-                  {{ list.count }}
+                  {{list.count }}
                 </v-btn>
               </v-card>
             </v-col>
