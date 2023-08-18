@@ -72,7 +72,7 @@
                   Último livro alugado:
                 </v-card-title>
                 <v-card-text
-                  class="text-h6  mt-n2 center blue-grey--text font-weight-medium"
+                  class="mt-n2 center blue-grey--text font-weight-medium" style="font-size: 16px;"
                 >
                   {{ lastRental }}
                 </v-card-text>
