@@ -6,12 +6,13 @@
     <v-divider color="white" dark></v-divider>
     <v-container>
       <v-row>
-        <v-col cols="12" sm="12" class="lg:mt-4 md:mt-1">
+        <v-col cols="12" class="lg:mt-4 md:mt-1">
           <v-row class="px-5 mt-n6 center">
             <v-col
-              cols="6"
-              md="6"
-              lg="3"
+              cols="12"
+              xs="12"
+              sm="6"
+              md="3"
               class="center"
               v-for="list in lists"
               :key="list.title"
@@ -37,13 +38,13 @@
                   left
                   style="z-index: 3"
                 >
-                  {{list.count }}
+                  {{ list.count }}
                 </v-btn>
               </v-card>
             </v-col>
           </v-row>
           <v-row class="mt-5">
-            <v-col cols="6" xs="12"  style="margin: auto;">
+            <v-col cols="auto" sm="12" md="6" style="margin: auto">
               <div
                 class="mt-3 card-graph"
                 style="
@@ -61,25 +62,29 @@
                 class="mt-2 card-graph"
                 style="
                   width: 80%;
-                  max-width: 480px;
                   min-width: 280px;
                   margin: auto;
                   height: 110px;
                 "
               >
-                <v-card-title class="center mt-n5" color="teal darken-3">
+                <v-card-title class="center mt-n6" color="teal darken-3">
                   <v-icon color="teal darken-3">mdi-book</v-icon>
                   Último livro alugado:
                 </v-card-title>
                 <v-card-text
-                  class="mt-n2 center blue-grey--text font-weight-medium" style="font-size: 16px;"
+                  class="text-h6 mt-n2 center blue-grey--text font-weight-medium"
                 >
                   {{ lastRental }}
                 </v-card-text>
               </v-card>
               <div
-                class="mt-4 card-graph"
-                style="width: 69%; max-width: 350px; margin: auto"
+                class="mt-6 card-graph"
+                style="
+                  width: 69%;
+                  max-width: 350px;
+                  min-width: 260px;
+                  margin: auto;
+                "
               >
                 <PieChart />
               </div>
@@ -163,6 +168,7 @@ export default {
     this.fetchData();
   },
 };
+
 </script>
 
 <style scoped>
