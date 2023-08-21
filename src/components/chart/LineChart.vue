@@ -2,7 +2,7 @@
   <v-flex>
     <div class="chart_container">
       <div class="title text-center">Livros mais alugados</div>
-      <canvas ref="myChart"  width="400" height="400"></canvas>
+      <canvas ref="myChart" width="400" height="400"></canvas>
     </div>
   </v-flex>
 </template>

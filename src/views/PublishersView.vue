@@ -4,121 +4,62 @@
       <v-row class="d-flex align-center">
         <div class="header">
           <v-col cols="auto ml-2">
-            <v-toolbar-title class="font-weight-medium" style="font-size: 30px"
-              >Editoras</v-toolbar-title
-            >
+            <v-toolbar-title class="font-weight-medium" style="font-size: 30px">Editoras</v-toolbar-title>
           </v-col>
           <v-col cols="auto">
             <div>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 3 55"
-                width="16"
-                height="55"
-              >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 55" width="16" height="55">
                 <rect width="3" height="55" rx="1"></rect>
               </svg>
             </div>
           </v-col>
 
           <v-col cols="auto">
-            <v-btn
-              class="rounded-lg px-0 v-btn v-btn--has-bg theme--dark"
-              color="blue darken-3"
-              style="height: 40px; min-width: 40px"
-              @click="openModalCreate"
-            >
+            <v-btn class="rounded-lg px-0 v-btn v-btn--has-bg theme--dark" color="blue darken-3"
+              style="height: 40px; min-width: 40px" @click="openModalCreate">
               <span class="v-btn__content">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 256 256"
-                  width="30"
-                  height="30"
-                  fill="currentColor"
-                >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="30" height="30" fill="currentColor">
                   <g>
-                    <line
-                      x1="40"
-                      y1="128"
-                      x2="216"
-                      y2="128"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="24"
-                    ></line>
-                    <line
-                      x1="128"
-                      y1="40"
-                      x2="128"
-                      y2="216"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="24"
-                    ></line>
+                    <line x1="40" y1="128" x2="216" y2="128" fill="none" stroke="currentColor" stroke-linecap="round"
+                      stroke-linejoin="round" stroke-width="24"></line>
+                    <line x1="128" y1="40" x2="128" y2="216" fill="none" stroke="currentColor" stroke-linecap="round"
+                      stroke-linejoin="round" stroke-width="24"></line>
                   </g>
                 </svg>
               </span>
             </v-btn>
           </v-col>
         </div>
-        <v-col
-          cols="12"
-          xs="12"
-          sm="5"
-          md="6"
-          lg="6"
-          class="mr-auto ml-auto mr-sm-2 mb-n6"
-        >
-          <v-text-field
-            dense
-            outlined
-            v-model="search"
-            label="Pesquisar"
-            prepend-inner-icon="mdi-magnify"
-            no-data-text="Nenhuma editora encontrado"
-          ></v-text-field>
+        <v-col cols="12" xs="12" sm="5" md="6" lg="6" class="mr-auto ml-auto mr-sm-2 mb-n6">
+          <v-text-field dense outlined v-model="search" label="Pesquisar" prepend-inner-icon="mdi-magnify"
+            no-data-text="Nenhuma editora encontrado"></v-text-field>
         </v-col>
       </v-row>
 
-      <v-data-table
-        :headers="headers"
-        :items="filteredPublishers"
-        :sort-by="['id']"
-        :header-props="headerProps"
-        :sort-desc="[false, true]"
-        multi-sort
-        :items-per-page="itemsPerPage"
-        :footer-props="{
+      <v-data-table :headers="headers" :items="filteredPublishers" :sort-by="['id']" :header-props="headerProps"
+        :sort-desc="[false, true]" multi-sort :items-per-page="itemsPerPage" :footer-props="{
           itemsPerPageOptions: [5, 10, 25, 50],
           itemsPerPageText: 'Linhas por página',
-        }"
-        mobile-breakpoint="820"
-        class="align-center px-4 py-4"
-        no-data-text="Nenhuma Editora encontrado"
-      >
+        }" mobile-breakpoint="820" class="align-center px-4 py-4" no-data-text="Nenhuma Editora encontrado">
         <template v-slot:[`item.actions`]="{ item }">
-  <v-tooltip bottom>
-    <template v-slot:activator="{ on }">
-      <v-icon variant="plain" color="info" @click="openModalUpdate(item)" v-on="on">
-        mdi-storefront-edit-outline
-      </v-icon>
-    </template>
-    <span>Editar Editora</span>
-  </v-tooltip>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-icon variant="plain" color="info" @click="openModalUpdate(item)" v-on="on">
+                mdi-storefront-edit-outline
+              </v-icon>
+            </template>
+            <span>Editar Editora</span>
+          </v-tooltip>
 
-  <v-tooltip bottom>
-    <template v-slot:activator="{ on }">
-      <v-icon variant="plain" color="error" @click="openModalDelete(item)" v-on="on">
-        mdi-trash-can-outline
-      </v-icon>
-    </template>
-    <span>Excluir Editora</span>
-  </v-tooltip>
-</template>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-icon variant="plain" color="error" @click="openModalDelete(item)" v-on="on">
+                mdi-trash-can-outline
+              </v-icon>
+            </template>
+            <span>Excluir Editora</span>
+          </v-tooltip>
+        </template>
 
         <template v-slot:[`item.editora`]="{ item }">
           {{ item.editora.nome }}
@@ -137,36 +78,17 @@
             </v-card-title>
             <v-card-text>
               <v-form ref="form" @submit.prevent="submitAction">
-                <v-text-field
-                  v-model="name"
-                  :rules="nameRules"
-                  :counter="25"
-                  label="Nome da editora"
-                  append-icon="mdi-bookshelf"
-                  required
-                ></v-text-field>
-                <v-text-field
-                  v-model="city"
-                  :rules="cityRules"
-                  :counter="25"
-                  label="Cidade da editora"
-                  append-icon="mdi-city-variant-outline"
-                  required
-                ></v-text-field>
+                <v-text-field v-model="name" :rules="nameRules" :counter="25" label="Nome da editora"
+                  append-icon="mdi-bookshelf" required></v-text-field>
+                <v-text-field v-model="city" :rules="cityRules" :counter="25" label="Cidade da editora"
+                  append-icon="mdi-city-variant-outline" required></v-text-field>
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn
-                    class="mr-2"
-                    type="submit"
-                    :disabled="!$refs.form || !$refs.form.validate()"
-                    color="primary"
-                    text
-                  >
+                  <v-btn class="mr-2" type="submit" :disabled="!$refs.form || !$refs.form.validate()" color="primary"
+                    text>
                     {{ submitButtonLabel }}
                   </v-btn>
-                  <v-btn class="" @click="handleCancel" color="error" text
-                    >Cancelar</v-btn
-                  >
+                  <v-btn class="" @click="handleCancel" color="error" text>Cancelar</v-btn>
                 </v-card-actions>
               </v-form>
             </v-card-text>

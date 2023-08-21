@@ -4,118 +4,51 @@
       <v-row class="d-flex align-center" xs="vertical-center">
         <div class="header">
           <v-col cols="auto" class="ml-2">
-            <v-toolbar-title class="font-weight-medium" style="font-size: 30px"
-              >Aluguéis</v-toolbar-title
-            >
+            <v-toolbar-title class="font-weight-medium" style="font-size: 30px">Aluguéis</v-toolbar-title>
           </v-col>
 
           <v-col cols="auto">
             <div>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 3 55"
-                width="16"
-                height="50"
-              >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 55" width="16" height="50">
                 <rect width="3" height="55" rx="1"></rect>
               </svg>
             </div>
           </v-col>
 
           <v-col cols="">
-            <v-btn
-              class="rounded-lg px-0 v-btn v-btn--has-bg theme--dark"
-              color="blue darken-3"
-              style="height: 40px; min-width: 40px"
-              @click="openModalCreate"
-            >
+            <v-btn class="rounded-lg px-0 v-btn v-btn--has-bg theme--dark" color="blue darken-3"
+              style="height: 40px; min-width: 40px" @click="openModalCreate">
               <span class="v-btn__content">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 256 256"
-                  width="30"
-                  height="30"
-                  fill="currentColor"
-                >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="30" height="30" fill="currentColor">
                   <g>
-                    <line
-                      x1="40"
-                      y1="128"
-                      x2="216"
-                      y2="128"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="24"
-                    ></line>
-                    <line
-                      x1="128"
-                      y1="40"
-                      x2="128"
-                      y2="216"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="24"
-                    ></line>
+                    <line x1="40" y1="128" x2="216" y2="128" fill="none" stroke="currentColor" stroke-linecap="round"
+                      stroke-linejoin="round" stroke-width="24"></line>
+                    <line x1="128" y1="40" x2="128" y2="216" fill="none" stroke="currentColor" stroke-linecap="round"
+                      stroke-linejoin="round" stroke-width="24"></line>
                   </g>
                 </svg>
               </span>
             </v-btn>
           </v-col>
         </div>
-        <v-col
-          cols="12"
-          xs="12"
-          sm="5"
-          md="6"
-          lg="6"
-          class="mr-auto ml-auto mr-sm-2 mb-n6"
-        >
-          <v-text-field
-            dense
-            outlined
-            v-model="search"
-            label="Pesquisar"
-            prepend-inner-icon="mdi-magnify"
-            no-data-text="Nenhum aluguel encontrado"
-          ></v-text-field>
+        <v-col cols="12" xs="12" sm="5" md="6" lg="6" class="mr-auto ml-auto mr-sm-2 mb-n6">
+          <v-text-field dense outlined v-model="search" label="Pesquisar" prepend-inner-icon="mdi-magnify"
+            no-data-text="Nenhum aluguel encontrado"></v-text-field>
         </v-col>
       </v-row>
 
-      <v-data-table
-        style="overflow-x: hidden"
-        :headers="headers"
-        :items="filteredRentals"
-        :sort-by="['id']"
-        :sort-desc="[false, true]"
-        multi-sort
-        :items-per-page="itemsPerPage"
-        :header-props="headerProps"
-        :footer-props="{
+      <v-data-table style="overflow-x: hidden" :headers="headers" :items="filteredRentals" :sort-by="['id']"
+        :sort-desc="[false, true]" multi-sort :items-per-page="itemsPerPage" :header-props="headerProps" :footer-props="{
           itemsPerPageOptions: [5, 10, 25, -1],
           itemsPerPageText: 'Linhas por página',
-        }"
-        mobile-breakpoint="880"
-        class="align-center px-4 py-4"
-        no-data-text="Nenhum Aluguel encontrado"
-      >
+        }" mobile-breakpoint="880" class="align-center px-4 py-4" no-data-text="Nenhum Aluguel encontrado">
         <template v-slot:[`item.actions`]="{ item }">
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
-              <v-icon
-                variant="plain"
-                v-if="
-                  item.status === 'Não devolvido' &&
-                  parseDateISO(item.data_previsao) <=
-                    parseDateISO(item.data_aluguel)
-                "
-                color="warning"
-                @click="openModalReturn(item)"
-                v-on="on"
-              >
+              <v-icon variant="plain" v-if="item.status === 'Não devolvido' &&
+                parseDateISO(item.data_previsao) <=
+                parseDateISO(item.data_aluguel)
+                " color="warning" @click="openModalReturn(item)" v-on="on">
                 mdi-book-clock-outline
               </v-icon>
             </template>
@@ -124,13 +57,10 @@
 
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
-              <v-icon
-                variant="plain"
-                v-if="item.data_devolucao === 'Não devolvido'"
-                color="success"
-                @click="openModalReturn(item)"
-                v-on="on"
-              >
+              <v-icon variant="plain" v-if="item.data_devolucao === 'Não devolvido' &&
+                parseDateISO(item.data_previsao) >
+                parseDateISO(item.data_aluguel)
+                " color="success" @click="openModalReturn(item)" v-on="on">
                 mdi-book-arrow-up-outline
               </v-icon>
             </template>
@@ -139,13 +69,8 @@
 
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
-              <v-icon
-                variant="plain"
-                v-if="item.status === 'Não devolvido'"
-                color="error"
-                @click="openModalDelete(item)"
-                v-on="on"
-              >
+              <v-icon variant="plain" v-if="item.status === 'Não devolvido'" color="error" @click="openModalDelete(item)"
+                v-on="on">
                 mdi-trash-can-outline
               </v-icon>
             </template>
@@ -168,98 +93,37 @@
             </v-card-title>
             <v-card-text>
               <v-form ref="form" @submit.prevent="submitCreate">
-                <v-autocomplete
-                  v-model="selectedBook"
-                  :items="availableBooks"
-                  :rules="selectBookRules"
-                  item-text="nome"
-                  label="Nome do livro"
-                  append-icon="mdi-book-open-page-variant"
-                  required
-                  no-data-text="Nenhuma editora encontrado"
-                ></v-autocomplete>
-
-                <v-autocomplete
-                  v-model="selectedUser"
-                  :items="availableUsers"
-                  item-text="nome"
-                  :rules="selectedUserRules"
-                  label="Nome do Cliente"
-                  append-icon="mdi-account"
-                  required
-                  no-data-text="Nenhuma editora encontrado"
-                ></v-autocomplete>
-                <v-menu
-                  ref="menu1"
-                  v-model="menu1"
-                  :close-on-content-click="false"
-                  transition="scale-transition"
-                  offset-y
-                  max-width="290px"
-                  min-width="auto"
-                >
+                <v-autocomplete v-model="selectedBook" :items="availableBooks" :rules="selectBookRules" item-text="nome"
+                  label="Nome do livro" append-icon="mdi-book-open-page-variant" required
+                  no-data-text="Nenhuma editora encontrado"></v-autocomplete>
+                <v-autocomplete v-model="selectedUser" :items="availableUsers" item-text="nome" :rules="selectedUserRules"
+                  label="Nome do Cliente" append-icon="mdi-account" required
+                  no-data-text="Nenhuma editora encontrado"></v-autocomplete>
+                <v-menu ref="menu1" v-model="menu1" :close-on-content-click="false" transition="scale-transition" offset-y
+                  max-width="290px" min-width="auto">
                   <template v-slot:activator="{ on, attrs }">
-                    <v-text-field
-                      disabled
-                      v-model="dateFormatted"
-                      label="Data de aluguel"
-                      hint="DD/MM/YYYY format"
-                      :rules="dateFormattedRules"
-                      persistent-hint
-                      append-icon="mdi-calendar"
-                      @blur="dateFormatted = formatDate(dateFormatted)"
-                      v-bind="attrs"
-                      v-on="on"
-                    ></v-text-field>
+                    <v-text-field disabled v-model="dateFormatted" label="Data de aluguel" hint="DD/MM/YYYY format"
+                      :rules="dateFormattedRules" persistent-hint append-icon="mdi-calendar"
+                      @blur="dateFormatted = formatDate(dateFormatted)" v-bind="attrs" v-on="on"></v-text-field>
                   </template>
-                  <v-date-picker
-                    v-model="aluguelDate"
-                    no-title
-                    @input="menu1 = false"
-                  ></v-date-picker>
+                  <v-date-picker v-model="aluguelDate" no-title @input="menu1 = false"></v-date-picker>
                 </v-menu>
-                <v-menu
-                  ref="menu2"
-                  v-model="menu2"
-                  :close-on-content-click="false"
-                  transition="scale-transition"
-                  offset-y
-                  max-width="290px"
-                  min-width="auto"
-                >
+                <v-menu ref="menu2" v-model="menu2" :close-on-content-click="false" transition="scale-transition" offset-y
+                  max-width="290px" min-width="auto">
                   <template v-slot:activator="{ on, attrs }">
-                    <v-text-field
-                      v-model="previsaoDateFormatted"
-                      label="Previsão de devolução"
-                      hint="MM/DD/YYYY format"
-                      :rules="previsaoDateRules"
-                      persistent-hint
-                      append-icon="mdi-calendar"
-                      @blur="formattedPrevisaoDate = formatDate(previsaoDate)"
-                      v-bind="attrs"
-                      v-on="on"
-                    ></v-text-field>
+                    <v-text-field v-model="previsaoDateFormatted" label="Previsão de devolução" hint="MM/DD/YYYY format"
+                      :rules="previsaoDateRules" persistent-hint append-icon="mdi-calendar"
+                      @blur="formattedPrevisaoDate = formatDate(previsaoDate)" v-bind="attrs" v-on="on"></v-text-field>
                   </template>
-                  <v-date-picker
-                    v-model="previsaoDate"
-                    no-title
-                    @input="menu2 = false"
-                  ></v-date-picker>
+                  <v-date-picker v-model="previsaoDate" no-title @input="menu2 = false"></v-date-picker>
                 </v-menu>
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn
-                    class="mr-2"
-                    type="submit"
-                    :disabled="!$refs.form || !$refs.form.validate()"
-                    color="primary"
-                    text
-                  >
+                  <v-btn class="mr-2" type="submit" :disabled="!$refs.form || !$refs.form.validate()" color="primary"
+                    text>
                     Salvar
                   </v-btn>
-                  <v-btn class="" @click="handleCancel" color="error" text
-                    >Cancelar</v-btn
-                  >
+                  <v-btn class="" @click="handleCancel" color="error" text>Cancelar</v-btn>
                 </v-card-actions>
               </v-form>
             </v-card-text>
@@ -715,12 +579,13 @@ export default {
 </script>
 <style scoped>
 @media (max-width: 1600px) {
-  ::v-deep .v-data-table > .v-data-table__wrapper > table > tbody > tr > td,
-  ::v-deep .v-data-table > .v-data-table__wrapper > table > tbody > tr > th,
-  ::v-deep .v-data-table > .v-data-table__wrapper > table > thead > tr > td,
-  ::v-deep .v-data-table > .v-data-table__wrapper > table > thead > tr > th,
-  ::v-deep .v-data-table > .v-data-table__wrapper > table > tfoot > tr > td,
-  ::v-deep .v-data-table > .v-data-table__wrapper > table > tfoot > tr > th {
+
+  ::v-deep .v-data-table>.v-data-table__wrapper>table>tbody>tr>td,
+  ::v-deep .v-data-table>.v-data-table__wrapper>table>tbody>tr>th,
+  ::v-deep .v-data-table>.v-data-table__wrapper>table>thead>tr>td,
+  ::v-deep .v-data-table>.v-data-table__wrapper>table>thead>tr>th,
+  ::v-deep .v-data-table>.v-data-table__wrapper>table>tfoot>tr>td,
+  ::v-deep .v-data-table>.v-data-table__wrapper>table>tfoot>tr>th {
     padding: 0px 4px !important;
   }
 }
