@@ -103,12 +103,33 @@
         no-data-text="Nenhum Cliente encontrado"
       >
         <template v-slot:[`item.actions`]="{ item }">
-          <v-icon variant="plain" color="info" @click="openModalUpdate(item)"
-            >mdi-account-edit-outline</v-icon
-          >
-          <v-icon variant="plain" color="error" @click="openModalDelete(item)"
-            >mdi-trash-can-outline</v-icon
-          >
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-icon
+                variant="plain"
+                color="info"
+                @click="openModalUpdate(item)"
+                v-on="on"
+              >
+                mdi-account-edit-outline
+              </v-icon>
+            </template>
+            <span>Editar Usuário</span>
+          </v-tooltip>
+
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-icon
+                variant="plain"
+                color="error"
+                @click="openModalDelete(item)"
+                v-on="on"
+              >
+                mdi-trash-can-outline
+              </v-icon>
+            </template>
+            <span>Excluir Usuário</span>
+          </v-tooltip>
         </template>
       </v-data-table>
 

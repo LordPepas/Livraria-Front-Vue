@@ -99,12 +99,33 @@
         no-data-text="Nenhum Livro encontrado"
       >
         <template v-slot:[`item.actions`]="{ item }">
-          <v-icon variant="plain" color="info" @click="openModalUpdate(item)"
-            >mdi-notebook-edit-outline</v-icon
-          >
-          <v-icon variant="plain" color="error" @click="openModalDelete(item)"
-            >mdi-trash-can-outline</v-icon
-          >
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-icon
+                variant="plain"
+                color="info"
+                @click="openModalUpdate(item)"
+                v-on="on"
+              >
+                mdi-notebook-edit-outline
+              </v-icon>
+            </template>
+            <span>Editar Livro</span>
+          </v-tooltip>
+
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-icon
+                variant="plain"
+                color="error"
+                @click="openModalDelete(item)"
+                v-on="on"
+              >
+                mdi-trash-can-outline
+              </v-icon>
+            </template>
+            <span>Excluir Livro</span>
+          </v-tooltip>
         </template>
       </v-data-table>
       <!-- FORM CREATE/UPDATE -->

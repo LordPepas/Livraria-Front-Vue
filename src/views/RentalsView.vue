@@ -81,13 +81,12 @@
             label="Pesquisar"
             prepend-inner-icon="mdi-magnify"
             no-data-text="Nenhum aluguel encontrado"
-           
           ></v-text-field>
         </v-col>
       </v-row>
 
       <v-data-table
-      style="overflow-x: hidden;"
+        style="overflow-x: hidden"
         :headers="headers"
         :items="filteredRentals"
         :sort-by="['id']"
@@ -104,31 +103,56 @@
         no-data-text="Nenhum Aluguel encontrado"
       >
         <template v-slot:[`item.actions`]="{ item }">
-          <v-icon
-            variant="plain"
-            v-if="
-              item.status === 'Não devolvido' &&
-              parseDateISO(item.data_previsao) <=
-                parseDateISO(item.data_aluguel)
-            "
-            color="warning"
-            @click="openModalReturn(item)"
-          >
-            mdi-book-clock-outline
-          </v-icon>
-          <v-icon
-            variant="plain"
-            v-else-if="item.data_devolucao === 'Não devolvido'"
-            color="success"
-            @click="openModalReturn(item)"
-          >
-            mdi-book-arrow-up-outline
-          </v-icon>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-icon
+                variant="plain"
+                v-if="
+                  item.status === 'Não devolvido' &&
+                  parseDateISO(item.data_previsao) <=
+                    parseDateISO(item.data_aluguel)
+                "
+                color="warning"
+                @click="openModalReturn(item)"
+                v-on="on"
+              >
+                mdi-book-clock-outline
+              </v-icon>
+            </template>
+            <span>Devolver Livro em atraso</span>
+          </v-tooltip>
 
-          <v-icon variant="plain" color="error" @click="openModalDelete(item)"
-            >mdi-trash-can-outline</v-icon
-          >
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-icon
+                variant="plain"
+                v-if="item.data_devolucao === 'Não devolvido'"
+                color="success"
+                @click="openModalReturn(item)"
+                v-on="on"
+              >
+                mdi-book-arrow-up-outline
+              </v-icon>
+            </template>
+            <span>Devolver Livro</span>
+          </v-tooltip>
+
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-icon
+                variant="plain"
+                v-if="item.status === 'Não devolvido'"
+                color="error"
+                @click="openModalDelete(item)"
+                v-on="on"
+              >
+                mdi-trash-can-outline
+              </v-icon>
+            </template>
+            <span>Excluir Aluguel</span>
+          </v-tooltip>
         </template>
+
         <template v-slot:[`item.status`]="{ item }">
           <v-chip outlined :color="getStatusColorAndName(item).color" dark>
             {{ (item.status = getStatusColorAndName(item).name) }}
