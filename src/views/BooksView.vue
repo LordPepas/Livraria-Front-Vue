@@ -116,7 +116,6 @@ export default {
       launch: "",
       dialogVisible: false,
       submitButtonLabel: "",
-      isSaveButtonDisabled: false,
       selectedBookId: null,
       availablePublishers: [],
       headers: [

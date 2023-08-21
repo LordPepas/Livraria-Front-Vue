@@ -112,7 +112,6 @@ export default {
       address: "",
       submitButtonLabel: "",
       dialogVisible: false,
-      isSaveButtonDisabled: false,
       selectedUserId: null,
       headerProps: {
         sortByText: "Ordenar Por",

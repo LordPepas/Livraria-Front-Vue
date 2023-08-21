@@ -168,7 +168,6 @@ export default {
       Createdialog: false,
       dialogReturn: false,
       selectedReantalId: null,
-      isSaveButtonDisabled: false,
       headerProps: {
         sortByText: "Ordenar Por",
       },
