@@ -46,7 +46,7 @@
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
               <v-icon variant="plain" v-if="item.status === 'Não devolvido' &&
-                parseDateISO(item.data_previsao) <=
+                parseDateISO(item.data_previsao) <
                 parseDateISO(item.data_aluguel)
                 " color="warning" @click="openModalReturn(item)" v-on="on">
                 mdi-book-clock-outline
@@ -58,7 +58,7 @@
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
               <v-icon variant="plain" v-if="item.data_devolucao === 'Não devolvido' &&
-                parseDateISO(item.data_previsao) >
+                parseDateISO(item.data_previsao) >=
                 parseDateISO(item.data_aluguel)
                 " color="success" @click="openModalReturn(item)" v-on="on">
                 mdi-book-arrow-up-outline
@@ -234,7 +234,7 @@ export default {
     this.fetchRentals().then(() => {
       setTimeout(() => {
         this.itemsPerPage = 5;
-      }, 1);
+      });
     });
   },
   computed: {

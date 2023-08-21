@@ -7,7 +7,7 @@
           <v-row class="px-5 mt-n6 center">
             <v-col cols="12" xs="12" sm="6" md="3" class="center" v-for="list in lists" :key="list.title">
               <v-card color="#f9faf" class="rounded-circle border pt-10" width="130" height="130">
-                <v-icon size="40" color="teal darken-3">{{ list.icon }}</v-icon>
+                <v-icon size="38" color="teal darken-3">{{ list.icon }}</v-icon>
                 <v-card-text class="text-lg-h7 mt-n3" size="40">
                   <span class="blue-grey--text font-weight-medium">{{
                     list.title
