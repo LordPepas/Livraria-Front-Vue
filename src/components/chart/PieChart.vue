@@ -3,6 +3,7 @@
     <div class="chart_container">
       <div class="title text-center">Status de Aluguéis </div>
       <canvas ref="myPieChart"></canvas>
+      <!-- <canvas ref="myPieChart" style="min-width: 280px; margin: auto; margin-top: 18px;"></canvas> -->
     </div>
   </v-flex>
 </template>

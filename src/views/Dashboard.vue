@@ -23,7 +23,7 @@
           <v-row class="mt-5">
             <v-col cols="auto" sm="12" md="6" style="margin: auto">
               <div class="mt-3 card-graph" style="
-                  width: 98%;
+                  width: 80%;
                   min-width: 280px;
                   max-width: 480px;
                   margin: auto;
@@ -45,11 +45,11 @@
                 <v-card-text class="text-h6 mt-n2 center blue-grey--text font-weight-medium">
                   {{ lastRental }}
                 </v-card-text>
-              </v-card>
-              <div class="mt-6 card-graph" style="
-                  width: 69%;
+            </v-card>
+              <div class="mt-8 card-graph" style="
+                  width: 80%;
                   max-width: 350px;
-                  min-width: 260px;
+                  min-width: 280px;
                   margin: auto;
                 ">
                 <PieChart />
