@@ -1,11 +1,11 @@
 import http from "../plugins/axios";
 
 export default {
-  read: () => {
-    return http.get("alugueis");
-  },
   create: (aluguel) => {
     return http.post("/aluguel", aluguel);
+  },
+  read: () => {
+    return http.get("alugueis");
   },
   update: (aluguel) => {
     return http.put("/aluguel", aluguel);

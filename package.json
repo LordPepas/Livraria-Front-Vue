@@ -8,6 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "apexcharts": "^3.41.1",
     "axios": "^1.4.0",
     "chart.js": "^4.3.3",
     "core-js": "^3.8.3",
@@ -15,12 +16,12 @@
     "google-charts": "^2.0.0",
     "sweetalert2": "^11.7.20",
     "vue": "^2.7.14",
+    "vue-apexcharts": "^1.6.2",
     "vue-chartjs": "^5.2.0",
     "vue-google-charts": "^1.1.0",
     "vue-router": "^3.5.1",
     "vuelidate": "^0.7.7",
-    "vuetify": "^2.6.0",
-    "vuex": "^4.1.0"
+    "vuetify": "^2.6.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",

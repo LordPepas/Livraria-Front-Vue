@@ -2,37 +2,20 @@
   <div class="d-flex flex-column justify-end align-end mt-2">
     <v-container>
       <v-row class="d-flex align-center">
-        <div class="header">
-          <v-col cols="auto ml-2">
-            <v-toolbar-title class="font-weight-medium" style="font-size: 30px">Editoras</v-toolbar-title>
-          </v-col>
-          <v-col cols="auto">
-            <div>
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 55" width="16" height="55">
-                <rect width="3" height="55" rx="1"></rect>
-              </svg>
-            </div>
-          </v-col>
-
-          <v-col cols="auto">
-            <v-btn class="rounded-lg px-0 v-btn v-btn--has-bg theme--dark" color="blue darken-3"
-              style="height: 40px; min-width: 40px" @click="openModalCreate">
-              <span class="v-btn__content">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="30" height="30" fill="currentColor">
-                  <g>
-                    <line x1="40" y1="128" x2="216" y2="128" fill="none" stroke="currentColor" stroke-linecap="round"
-                      stroke-linejoin="round" stroke-width="24"></line>
-                    <line x1="128" y1="40" x2="128" y2="216" fill="none" stroke="currentColor" stroke-linecap="round"
-                      stroke-linejoin="round" stroke-width="24"></line>
-                  </g>
-                </svg>
-              </span>
-            </v-btn>
-          </v-col>
-        </div>
+        <v-col cols="auto ml-2">
+          <v-toolbar-title class="font-weight-medium" style="font-size: 30px">Editoras</v-toolbar-title>
+        </v-col>
+        <v-col cols="auto">
+          <img src="@/assets/divider.svg">
+        </v-col>
+        <v-col cols="auto">
+          <v-btn class="rounded-lg px-0 v-btn v-btn--has-bg theme--dark" color="blue darken-3"
+            style="height: 40px; min-width: 40px" @click="openModalCreate">
+            <img src="@/assets/plus.svg" alt="">
+          </v-btn>
+        </v-col>
         <v-col cols="12" xs="12" sm="5" md="6" lg="6" class="mr-auto ml-auto mr-sm-2 mb-n6">
-          <v-text-field dense outlined v-model="search" label="Pesquisar" prepend-inner-icon="mdi-magnify"
-            no-data-text="Nenhuma editora encontrado"></v-text-field>
+          <v-text-field dense outlined v-model="search" label="Pesquisar" prepend-inner-icon="mdi-magnify"></v-text-field>
         </v-col>
       </v-row>
 

@@ -1,11 +1,11 @@
 import http from "../plugins/axios";
 
 export default {
-  read: () => {
-    return http.get("usuarios");
-  },
   create: (usuario) => {
     return http.post("usuario", usuario);
+  },
+  read: () => {
+    return http.get("usuarios");
   },
   update: (usuario) => {
     return http.put("usuario/", usuario);

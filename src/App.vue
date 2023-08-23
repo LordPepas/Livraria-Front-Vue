@@ -23,7 +23,6 @@
 </template>
 
 <script>
-// import { ref } from "vue";
 
 import NavBar from "./components/NavBar.vue";
 import FooTer from "./components/FooTer.vue";
@@ -41,7 +40,7 @@ export default {
 
 <style>
 .crud {
-  width: 90vw;
+  width: 80vw;
   margin: auto;
   margin-top: 30px;
 }
@@ -55,7 +54,7 @@ export default {
     margin: auto;
   }
 }
-@media (max-width: 1000px) {
+@media (max-width: 1800px) {
   .crud {
     width: 90vw;
   }

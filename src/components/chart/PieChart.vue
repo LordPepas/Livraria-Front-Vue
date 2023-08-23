@@ -2,8 +2,7 @@
   <v-flex width="100">
     <div class="chart_container">
       <div class="title text-center">Status de Aluguéis </div>
-      <canvas ref="myPieChart"></canvas>
-      <!-- <canvas ref="myPieChart" style="min-width: 280px; margin: auto; margin-top: 18px;"></canvas> -->
+      <canvas ref="myPieChart" style="max-width: 270px; min-width: 260px ; margin: auto;"></canvas>
     </div>
   </v-flex>
 </template>
@@ -50,7 +49,7 @@ export default {
 
         const statusCountArray = Object.entries(status);
 
-        // statusCountArray.sort((a, b) => b[1] - a[1]);
+        statusCountArray.sort((a, b) => b[1] - a[1]);
 
         this.statusRentals = statusCountArray;
 

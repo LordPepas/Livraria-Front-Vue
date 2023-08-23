@@ -41,37 +41,26 @@ export default {
 
         this.topThreeBooks = bookCountArray.slice(0, 3);
 
-        this.renderPieChart();
+        this.renderBarChart();
       } catch (error) {
         console.error("Erro ao buscar dados:", error);
       }
     },
-    renderPieChart() {
+    renderBarChart() {
       if (!this.topThreeBooks) return;
 
       const labels = this.topThreeBooks.map((item) => item[0]);
       const data = this.topThreeBooks.map((item) => item[1]);
-      console.log(labels);
+      // const topThreeBookNames = this.topThreeBooks.map((item) => item[0]).join(', ');
       const ctx = this.$refs.myChart.getContext("2d");
       new Chart(ctx, {
         type: "bar",
-        options: {
-          indexAxis: "x",
-          scales: {
-            x: {
-              display: false, // Remove o eixo X
-            },
-            y: {
-              beginAtZero: true,
-            },
-          },
-        },
         data: {
           labels: labels,
           datasets: [
             {
               axis: "y",
-              label: "Livros Alugados",
+              label: 'Livros alugados',
               data: data,
               fill: false,
               backgroundColor: [
@@ -88,9 +77,20 @@ export default {
             },
           ],
         },
-        plugins: {
-          legend: {
-            display: false,
+        options: {
+          indexAxis: "x",
+          scales: {
+            x: {
+              display: false,
+            },
+            y: {
+              beginAtZero: true,
+            },
+          },
+          plugins: {
+            legend: {
+              display: false,
+            },
           },
         },
       });

@@ -1,11 +1,11 @@
 import http from "../plugins/axios";
 
 export default {
-  read: () => {
-    return http.get("editoras");
-  },
   create: (editora) => {
     return http.post("editora", editora);
+  },
+  read: () => {
+    return http.get("editoras");
   },
   update: (editora) => {
     return http.put("editora/", editora);

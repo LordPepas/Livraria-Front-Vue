@@ -21,23 +21,13 @@
             </v-col>
           </v-row>
           <v-row class="mt-5">
-            <v-col cols="auto" sm="12" md="6" style="margin: auto">
-              <div class="mt-3 card-graph" style="
-                  width: 80%;
-                  min-width: 280px;
-                  max-width: 480px;
-                  margin: auto;
-                ">
+            <v-col cols="auto" style="margin: auto;">
+              <v-card class="mt-2 card-graph">
                 <LineChart />
-              </div>
+              </v-card>
             </v-col>
             <v-col cols="12" md="6">
-              <v-card class="mt-2 card-graph" style="
-                  width: 80%;
-                  min-width: 280px;
-                  margin: auto;
-                  height: 110px;
-                ">
+              <v-card class="mt-2 card-graph lastRental">
                 <v-card-title class="center mt-n6" color="teal darken-3">
                   <v-icon color="teal darken-3">mdi-book</v-icon>
                   Último livro alugado:
@@ -45,15 +35,10 @@
                 <v-card-text class="text-h6 mt-n2 center blue-grey--text font-weight-medium">
                   {{ lastRental }}
                 </v-card-text>
-            </v-card>
-              <div class="mt-8 card-graph" style="
-                  width: 80%;
-                  max-width: 350px;
-                  min-width: 280px;
-                  margin: auto;
-                ">
+              </v-card>
+              <v-card class="card-graph mt">
                 <PieChart />
-              </div>
+              </v-card>
             </v-col>
           </v-row>
         </v-col>
@@ -133,13 +118,24 @@ export default {
   mounted() {
     this.fetchData();
   },
+  computed: {
+    cardClasses() {
+      return {
+        'mt-10': this.$vuetify.breakpoint.lgAndUp,
+        'md:mt-5': this.$vuetify.breakpoint.mdOnly
+      };
+    }
+  },
 };
-
 </script>
 
 <style scoped>
 .border {
   border: 2px solid #0097a7 !important;
+}
+
+.lastRental {
+  height: 120px;
 }
 
 .center-button {
@@ -161,6 +157,10 @@ export default {
   padding: 20px;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
   border-radius: 5px;
+  width: 460px;
+  min-width: 260px;
+  max-width: 480px;
+  margin: auto;
 }
 
 .center {
@@ -168,4 +168,55 @@ export default {
   justify-content: center;
   text-align: center;
 }
-</style>
+
+.mt {
+  margin-top: 30px;
+}
+
+@media (max-width: 1460px) {
+  .card-graph {
+    width: 440px;
+  }
+
+  .lastRental {
+    height: 100px;
+  }
+
+  .mt {
+    margin-top: 28px;
+  }
+}
+
+@media (max-width: 1300px) {
+  .card-graph {
+    width: 390px;
+  }
+
+  .lastRental {
+    height: 90px;
+  }
+
+  .mt {
+    margin-top: 18px;
+  }
+}
+
+@media (max-width: 500px) {
+  .card-graph {
+    width: 340px;
+  }
+
+  .lastRental {
+    height: 120px;
+  }
+
+  .mt {
+    margin-top: 32px;
+  }
+}
+
+@media (max-width: 420px) {
+  .card-graph {
+    width: 280px;
+  }
+}</style>
