@@ -1,27 +1,54 @@
 <template>
-  <div class="d-flex flex-column justify-end align-end" style="max-width: 1300px; margin: auto">
+  <div
+    class="d-flex flex-column justify-end align-end"
+    style="max-width: 1300px; margin: auto"
+  >
     <v-divider color="white" dark></v-divider>
     <v-container>
       <v-row>
         <v-col cols="12" class="lg:mt-4 md:mt-1">
           <v-row class="px-5 mt-n6 center">
-            <v-col cols="12" xs="12" sm="6" md="3" class="center" v-for="list in lists" :key="list.title">
-              <v-card color="#f9faf" class="rounded-circle border pt-10" width="130" height="130">
-                <v-icon size="38" color="teal darken-3">{{ list.icon }}</v-icon>
+            <v-col
+              cols="12"
+              xs="12"
+              sm="6"
+              md="3"
+              class="center"
+              v-for="list in lists"
+              :key="list.title"
+            >
+              <v-card
+                color="#f9faf"
+                class="rounded-circle border pt-10"
+                width="130"
+                height="130"
+              >
+              <v-icon size="38" color="teal darken-3">{{
+                list.icon
+                  }}</v-icon>
                 <v-card-text class="text-lg-h7 mt-n3" size="40">
                   <span class="blue-grey--text font-weight-medium">{{
                     list.title
                   }}</span>
                 </v-card-text>
-
-                <v-btn absolute color="teal darken-3" class="white--text center-button" fab left style="z-index: 3">
-                  {{ list.count }}
-                </v-btn>
+                
+                <router-link :to="list.route" class="no-decoration">
+                <v-btn
+                  absolute
+                  color="teal darken-3"
+                  class="white--text center-button"
+                  fab
+                  left
+                  style="z-index: 3"
+                >
+                {{ list.count }}
+              </v-btn>
+            </router-link>
               </v-card>
             </v-col>
           </v-row>
           <v-row class="mt-5">
-            <v-col cols="auto" style="margin: auto;">
+            <v-col cols="auto" style="margin: auto">
               <v-card class="mt-2 card-graph">
                 <LineChart />
               </v-card>
@@ -32,7 +59,9 @@
                   <v-icon color="teal darken-3">mdi-book</v-icon>
                   Último livro alugado:
                 </v-card-title>
-                <v-card-text class="text-h6 mt-n2 center blue-grey--text font-weight-medium">
+                <v-card-text
+                  class="text-h6 mt-n2 center blue-grey--text font-weight-medium"
+                >
                   {{ lastRental }}
                 </v-card-text>
               </v-card>
@@ -65,21 +94,25 @@ export default {
           icon: "mdi-account-group",
           title: "Clientes",
           count: 0,
+          route: "/UsersView",
         },
         {
           icon: "mdi-domain",
           title: "Editoras",
           count: 0,
+          route: "/PublishersView",
         },
         {
           icon: "mdi-book-open-page-variant",
           title: "Livros",
           count: 0,
+          route: "/BooksView",
         },
         {
           icon: "mdi-book-account",
           title: "Aluguéis",
           count: 0,
+          route: "/RentalsView",
         },
       ],
     };
@@ -90,7 +123,7 @@ export default {
   },
 
   methods: {
-    async fetchData() {
+    async findData() {
       try {
         const [users, publishers, books, rentals] = await Promise.all([
           Users.read(),
@@ -116,15 +149,15 @@ export default {
     },
   },
   mounted() {
-    this.fetchData();
+    this.findData();
   },
   computed: {
     cardClasses() {
       return {
-        'mt-10': this.$vuetify.breakpoint.lgAndUp,
-        'md:mt-5': this.$vuetify.breakpoint.mdOnly
+        "mt-10": this.$vuetify.breakpoint.lgAndUp,
+        "md:mt-5": this.$vuetify.breakpoint.mdOnly,
       };
-    }
+    },
   },
 };
 </script>
@@ -135,7 +168,7 @@ export default {
 }
 
 .lastRental {
-  height: 120px;
+  height: 110px;
 }
 
 .center-button {
@@ -143,13 +176,9 @@ export default {
   transform: translateY(-50%);
 }
 
-.v-btn--fab.v-size--default.v-btn--absolute.v-btn--top {
-  top: 65px !important;
-}
-
 .v-btn--absolute.v-btn--left,
 .v-btn--fixed.v-btn--left {
-  left: -28px !important;
+  left: -26px !important;
 }
 
 .card-graph {
@@ -170,7 +199,7 @@ export default {
 }
 
 .mt {
-  margin-top: 30px;
+  margin-top: 40px;
 }
 
 @media (max-width: 1460px) {
@@ -201,6 +230,20 @@ export default {
   }
 }
 
+@media (max-width: 940px) {
+  .card-graph {
+    width: 420px;
+  }
+
+  .lastRental {
+    height: 90px;
+  }
+
+  .mt {
+    margin-top: 18px;
+  }
+}
+
 @media (max-width: 500px) {
   .card-graph {
     width: 340px;
@@ -219,4 +262,5 @@ export default {
   .card-graph {
     width: 280px;
   }
-}</style>
+}
+</style>

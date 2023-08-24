@@ -3,31 +3,66 @@
     <v-container>
       <v-row class="d-flex align-center">
         <v-col cols="auto ml-2">
-          <v-toolbar-title class="font-weight-medium" style="font-size: 30px">Editoras</v-toolbar-title>
+          <v-toolbar-title class="font-weight-medium" style="font-size: 30px"
+            >Editoras</v-toolbar-title
+          >
         </v-col>
         <v-col cols="auto">
-          <img src="@/assets/divider.svg">
+          <img src="@/assets/divider.svg" />
         </v-col>
         <v-col cols="auto">
-          <v-btn class="rounded-lg px-0 v-btn v-btn--has-bg theme--dark" color="blue darken-3"
-            style="height: 40px; min-width: 40px" @click="openModalCreate">
-            <img src="@/assets/plus.svg" alt="">
+          <v-btn
+            class="rounded-lg px-0 v-btn v-btn--has-bg theme--dark"
+            color="blue darken-3"
+            style="height: 40px; min-width: 40px"
+            @click="openModalCreate"
+          >
+            <img src="@/assets/plus.svg" alt="" />
           </v-btn>
         </v-col>
-        <v-col cols="12" xs="12" sm="5" md="6" lg="6" class="mr-auto ml-auto mr-sm-2 mb-n6">
-          <v-text-field dense outlined v-model="search" label="Pesquisar" prepend-inner-icon="mdi-magnify"></v-text-field>
+        <v-col
+          cols="12"
+          xs="12"
+          sm="5"
+          md="6"
+          lg="6"
+          class="mr-auto ml-auto mr-sm-2 mb-n6"
+        >
+          <v-text-field
+            dense
+            outlined
+            v-model="search"
+            label="Pesquisar"
+            prepend-inner-icon="mdi-magnify"
+          ></v-text-field>
         </v-col>
       </v-row>
 
-      <v-data-table :headers="headers" :items="filteredPublishers" :sort-by="['id']" :header-props="headerProps"
-        :sort-desc="[false, true]" multi-sort :items-per-page="itemsPerPage" :footer-props="{
+      <v-data-table
+        :headers="headers"
+        :items="filteredPublishers"
+        :sort-by="['id']"
+        :header-props="headerProps"
+        :sort-desc="[false, true]"
+        multi-sort
+        :items-per-page="itemsPerPage"
+        :footer-props="{
           itemsPerPageOptions: [5, 10, 25, 50],
           itemsPerPageText: 'Linhas por página',
-        }" mobile-breakpoint="820" class="align-center px-4 py-4" no-data-text="Nenhuma Editora encontrado">
+        }"
+        mobile-breakpoint="820"
+        class="align-center px-4 py-4"
+        no-data-text="Nenhuma Editora encontrado"
+      >
         <template v-slot:[`item.actions`]="{ item }">
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
-              <v-icon variant="plain" color="info" @click="openModalUpdate(item)" v-on="on">
+              <v-icon
+                variant="plain"
+                color="info"
+                @click="openModalUpdate(item)"
+                v-on="on"
+              >
                 mdi-storefront-edit-outline
               </v-icon>
             </template>
@@ -36,7 +71,12 @@
 
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
-              <v-icon variant="plain" color="error" @click="openModalDelete(item)" v-on="on">
+              <v-icon
+                variant="plain"
+                color="error"
+                @click="openModalDelete(item)"
+                v-on="on"
+              >
                 mdi-trash-can-outline
               </v-icon>
             </template>
@@ -61,17 +101,36 @@
             </v-card-title>
             <v-card-text>
               <v-form ref="form" @submit.prevent="submitAction">
-                <v-text-field v-model="name" :rules="nameRules" :counter="25" label="Nome da editora"
-                  append-icon="mdi-bookshelf" required></v-text-field>
-                <v-text-field v-model="city" :rules="cityRules" :counter="25" label="Cidade da editora"
-                  append-icon="mdi-city-variant-outline" required></v-text-field>
+                <v-text-field
+                  v-model="name"
+                  :rules="nameRules"
+                  :counter="25"
+                  label="Nome da editora"
+                  append-icon="mdi-bookshelf"
+                  required
+                ></v-text-field>
+                <v-text-field
+                  v-model="city"
+                  :rules="cityRules"
+                  :counter="25"
+                  label="Cidade da editora"
+                  append-icon="mdi-city-variant-outline"
+                  required
+                ></v-text-field>
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn class="mr-2" type="submit" :disabled="!$refs.form || !$refs.form.validate()" color="primary"
-                    text>
+                  <v-btn
+                    class="mr-2"
+                    type="submit"
+                    :disabled="!isSubmitDisabled"
+                    color="primary"
+                    text
+                  >
                     {{ submitButtonLabel }}
                   </v-btn>
-                  <v-btn class="" @click="handleCancel" color="error" text>Cancelar</v-btn>
+                  <v-btn class="" @click="close" color="error" text
+                    >Cancelar</v-btn
+                  >
                 </v-card-actions>
               </v-form>
             </v-card-text>
@@ -96,6 +155,7 @@ export default {
       submitButtonLabel: "",
       dialogVisible: false,
       selectedPublisherId: null,
+      isSubmitDisabled: true,
       headerProps: {
         sortByText: "Ordenar Por",
       },
@@ -137,7 +197,7 @@ export default {
     };
   },
   created() {
-    this.fetchPublishers();
+    this.listPublishers();
   },
   computed: {
     filteredPublishers() {
@@ -165,7 +225,7 @@ export default {
     /* ===== CRUD ===== */
 
     /* READ */
-    async fetchPublishers() {
+    async listPublishers() {
       try {
         const response = await Publisher.read();
         this.fetchPublisher = response.data;
@@ -180,25 +240,22 @@ export default {
       this.$refs.form.resetValidation();
     },
 
-    handleCancel() {
+    close() {
+      this.selectedPublisherId = null;
       this.name = "";
       this.city = "";
-      this.selectedPublisherId = null;
       this.resetValidation();
-
       this.dialogVisible = false;
     },
 
     openModalCreate() {
       if (
         this.$refs.form &&
-        typeof this.$refs.form.resetValidation === "function"
+        typeof this.$refs.form.resetValidation() === "function"
       ) {
         this.$refs.form.resetValidation();
       }
-      this.name = "";
-      this.city = "";
-      this.selectedPublisherId = null;
+      this.isSubmitDisabled = true;
       this.dialogVisible = true;
       this.submitButtonLabel = "Salvar";
     },
@@ -208,80 +265,88 @@ export default {
       this.name = publisher.nome;
       this.city = publisher.cidade;
       this.dialogVisible = true;
+      this.isSubmitDisabled = true;
       this.submitButtonLabel = "Atualizar";
     },
 
     async submitAction() {
-      const publisherData = {
-        nome: this.name,
-        cidade: this.city,
-      };
-      if (!this.selectedPublisherId) {
-        try {
-          const response = await Publisher.create(publisherData);
-          this.fetchPublisher.push({
-            id: response.data.id,
-            ...publisherData,
-          });
-          Swal.fire({
-            icon: "success",
-            title: "Editora adicionada com Sucesso!",
-            showConfirmButton: false,
-            timer: 2000,
-            toast: true,
-            position: "top-end",
-            timerProgressBar: true,
-          });
-          this.handleCancel();
-          this.fetchPublishers();
-        } catch (error) {
-          Swal.fire({
-            icon: "error",
-            title: "Erro ao adicionar Editora",
-            text: error.response.data.error,
-            showConfirmButton: false,
-            toast: true,
-            position: "top-end",
-            timer: 3000,
-            timerProgressBar: true,
-          });
+      if (this.$refs.form && typeof this.$refs.form.validate === "function") {
+        const isFormValid = await this.$refs.form.validate();
+        if (!isFormValid) {
+          this.isSubmitDisabled = false;
+          return;
         }
-      } else {
-        const updatePublisher = {
-          id: this.selectedPublisherId,
-          ...publisherData,
+        const publisherData = {
+          nome: this.name,
+          cidade: this.city,
         };
-        try {
-          await Publisher.update(updatePublisher);
-          this.fetchPublisher = this.fetchPublisher.map((publisher) => {
-            if (publisher.id === updatePublisher.id) {
-              return updatePublisher;
-            } else {
-              return publisher;
-            }
-          });
-          Swal.fire({
-            icon: "success",
-            title: "Editora atualizada com Sucesso!",
-            showConfirmButton: false,
-            timer: 2000,
-            toast: true,
-            position: "top-end",
-            timerProgressBar: true,
-          });
-          this.handleCancel();
-          this.fetchPublishers();
-        } catch (error) {
-          Swal.fire({
-            icon: "error",
-            title: "Erro ao atualizar Editora",
-            text: error.response.data.error,
-            showConfirmButton: false,
-            toast: true,
-            position: "top-end",
-            timer: 3000,
-            timerProgressBar: true,
-          });
+        if (!this.selectedPublisherId) {
+          try {
+            const response = await Publisher.create(publisherData);
+            this.fetchPublisher.push({
+              id: response.data.id,
+              ...publisherData,
+            });
+            Swal.fire({
+              icon: "success",
+              title: "Editora adicionada com Sucesso!",
+              showConfirmButton: false,
+              timer: 2000,
+              toast: true,
+              position: "top-end",
+              timerProgressBar: true,
+            });
+            this.close();
+            this.listPublishers();
+          } catch (error) {
+            Swal.fire({
+              icon: "error",
+              title: "Erro ao adicionar Editora",
+              text: error.response.data.error,
+              showConfirmButton: false,
+              toast: true,
+              position: "top-end",
+              timer: 3000,
+              timerProgressBar: true,
+            });
+          }
+        } else {
+          const updatePublisher = {
+            id: this.selectedPublisherId,
+            ...publisherData,
+          };
+          try {
+            await Publisher.update(updatePublisher);
+            this.fetchPublisher = this.fetchPublisher.map((publisher) => {
+              if (publisher.id === updatePublisher.id) {
+                return updatePublisher;
+              } else {
+                return publisher;
+              }
+            });
+            Swal.fire({
+              icon: "success",
+              title: "Editora atualizada com Sucesso!",
+              showConfirmButton: false,
+              timer: 2000,
+              toast: true,
+              position: "top-end",
+              timerProgressBar: true,
+            });
+            this.close();
+            this.listPublishers();
+          } catch (error) {
+            Swal.fire({
+              icon: "error",
+              title: "Erro ao atualizar Editora",
+              text: error.response.data.error,
+              showConfirmButton: false,
+              toast: true,
+              position: "top-end",
+              timer: 3000,
+              timerProgressBar: true,
+            });
+          }
         }
       }
     },
@@ -290,7 +355,7 @@ export default {
     async openModalDelete(publisher) {
       const result = await Swal.fire({
         icon: "warning",
-        title: "Deseja excluir o produto?",
+        title: "Deseja excluir a editora?",
         text: "Essa ação não pode ser Desfeita!",
         showCancelButton: true,
         confirmButtonText: "Excluir!",
@@ -302,7 +367,8 @@ export default {
       if (result.isConfirmed) {
         try {
           await Publisher.delete(publisher);
-
+          this.close();
+          this.listPublishers();
           await Swal.fire({
             icon: "success",
             title: "Editora Excluída com Sucesso!",
@@ -312,8 +378,6 @@ export default {
             position: "top-end",
             timerProgressBar: true,
           });
-          this.handleCancel();
-          this.fetchPublishers();
         } catch (error) {
           await Swal.fire({
             icon: "error",

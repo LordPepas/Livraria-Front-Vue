@@ -63,7 +63,6 @@ export default {
 
       const labels = this.statusRentals.map((item) => item[0]);
       const data = this.statusRentals.map((item) => item[1]);
-      console.log(labels);
       const ctz = this.$refs.myPieChart.getContext("2d");
       new Chart(ctz, {
         type: "pie",

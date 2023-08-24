@@ -3,33 +3,76 @@
     <v-container>
       <v-row class="d-flex align-center">
         <v-col cols="auto ml-2">
-          <v-toolbar-title class="font-weight-medium" style="font-size: 30px">Usuários</v-toolbar-title>
+          <v-toolbar-title class="font-weight-medium" style="font-size: 30px"
+            >Usuários</v-toolbar-title
+          >
         </v-col>
         <v-col cols="auto">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3 55" width="16" height="55">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 3 55"
+            width="16"
+            height="55"
+          >
             <rect width="3" height="55" rx="1"></rect>
           </svg>
         </v-col>
         <v-col cols="auto">
-          <v-btn class="rounded-lg px-0 v-btn v-btn--has-bg theme--dark" color="blue darken-3"
-            style="height: 40px; min-width: 40px" @click="openModalCreate">
-            <img src="@/assets/plus.svg">
+          <v-btn
+            class="rounded-lg px-0 v-btn v-btn--has-bg theme--dark"
+            color="blue darken-3"
+            style="height: 40px; min-width: 40px"
+            @click="openModalCreate"
+          >
+            <img src="@/assets/plus.svg" />
           </v-btn>
-        </v-col> <v-col cols="12" xs="12" sm="5" md="6" lg="6" class="mr-auto ml-auto mr-sm-2 mb-n6">
-          <v-text-field dense outlined v-model="search" label="Pesquisar" prepend-inner-icon="mdi-magnify"></v-text-field>
+        </v-col>
+        <v-col
+          cols="12"
+          xs="12"
+          sm="5"
+          md="6"
+          lg="6"
+          class="mr-auto ml-auto mr-sm-2 mb-n6"
+        >
+          <v-text-field
+            dense
+            outlined
+            v-model="search"
+            label="Pesquisar"
+            prepend-inner-icon="mdi-magnify"
+          ></v-text-field>
         </v-col>
       </v-row>
 
-      <v-data-table min-width="690px" overflow-x="hidden" overflow-y="hidden" :headers="headers" :items="filteredUsers"
-        :sort-by="['id']" :sort-desc="[false, true]" multi-sort :items-per-page="itemsPerPage" :header-props="headerProps"
+      <v-data-table
+        min-width="690px"
+        overflow-x="hidden"
+        overflow-y="hidden"
+        :headers="headers"
+        :items="filteredUsers"
+        :sort-by="['id']"
+        :sort-desc="[false, true]"
+        multi-sort
+        :items-per-page="itemsPerPage"
+        :header-props="headerProps"
         :footer-props="{
           itemsPerPageOptions: [5, 10, 25, 50],
           itemsPerPageText: 'Linhas por página',
-        }" mobile-breakpoint="820" class="align-center px-4 py-4" no-data-text="Nenhum Cliente encontrado">
+        }"
+        mobile-breakpoint="820"
+        class="align-center px-4 py-4"
+        no-data-text="Nenhum Cliente encontrado"
+      >
         <template v-slot:[`item.actions`]="{ item }">
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
-              <v-icon variant="plain" color="info" @click="openModalUpdate(item)" v-on="on">
+              <v-icon
+                variant="plain"
+                color="info"
+                @click="openModalUpdate(item)"
+                v-on="on"
+              >
                 mdi-account-edit-outline
               </v-icon>
             </template>
@@ -38,7 +81,12 @@
 
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
-              <v-icon variant="plain" color="error" @click="openModalDelete(item)" v-on="on">
+              <v-icon
+                variant="plain"
+                color="error"
+                @click="openModalDelete(item)"
+                v-on="on"
+              >
                 mdi-trash-can-outline
               </v-icon>
             </template>
@@ -58,21 +106,48 @@
             </v-card-title>
             <v-card-text>
               <v-form ref="form" @submit.prevent="submitAction">
-                <v-text-field v-model="name" :rules="nameRules" :counter="45" label="Nome do usuário"
-                  required></v-text-field>
-                <v-text-field v-model="email" :rules="emailRules" :counter="120" label="Email do usuário"
-                  required></v-text-field>
-                <v-text-field v-model="city" :rules="cityRules" :counter="25" label="Cidade do usuário"
-                  required></v-text-field>
-                <v-text-field v-model="address" :rules="addressRules" :counter="25" label="Endereço do usuário"
-                  required></v-text-field>
+                <v-text-field
+                  v-model="name"
+                  :rules="nameRules"
+                  :counter="45"
+                  label="Nome do usuário"
+                  required
+                ></v-text-field>
+                <v-text-field
+                  v-model="email"
+                  :rules="emailRules"
+                  :counter="120"
+                  label="Email do usuário"
+                  required
+                ></v-text-field>
+                <v-text-field
+                  v-model="city"
+                  :rules="cityRules"
+                  :counter="25"
+                  label="Cidade do usuário"
+                  required
+                ></v-text-field>
+                <v-text-field
+                  v-model="address"
+                  :rules="addressRules"
+                  :counter="25"
+                  label="Endereço do usuário"
+                  required
+                ></v-text-field>
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn class="mr-2" type="submit" :disabled="!$refs.form || !$refs.form.validate()" color="primary"
-                    text>
+                  <v-btn
+                    class="mr-2"
+                    type="submit"
+                    :disabled="!isSubmitDisabled"
+                    color="primary"
+                    text
+                  >
                     {{ submitButtonLabel }}
                   </v-btn>
-                  <v-btn class="" @click="handleCancel" color="error" text>Cancelar</v-btn>
+                  <v-btn class="" @click="close" color="error" text
+                    >Cancelar</v-btn
+                  >
                 </v-card-actions>
               </v-form>
             </v-card-text>
@@ -89,7 +164,7 @@ import Swal from "sweetalert2";
 export default {
   data() {
     return {
-      fetchUser: [],
+      listUser: [],
       search: "",
       name: "",
       email: "",
@@ -98,6 +173,7 @@ export default {
       submitButtonLabel: "",
       dialogVisible: false,
       selectedUserId: null,
+      isSubmitDisabled: true,
       headerProps: {
         sortByText: "Ordenar Por",
       },
@@ -159,12 +235,12 @@ export default {
     };
   },
   created() {
-    this.fetchUsers();
+    this.listUsers();
   },
   computed: {
     filteredUsers() {
       const searchValue = this.search.toLowerCase();
-      return this.fetchUser.filter((usuario) => {
+      return this.listUser.filter((usuario) => {
         for (const prop in usuario) {
           const propValue = usuario[prop].toString().toLowerCase();
           if (propValue.includes(searchValue)) {
@@ -191,10 +267,10 @@ export default {
     /* ===== CRUD ===== */
 
     /* READ */
-    async fetchUsers() {
+    async listUsers() {
       try {
         const response = await Users.read();
-        this.fetchUser = response.data;
+        this.listUser = response.data;
       } catch (error) {
         console.error("Erro ao buscar usuários:", error);
       }
@@ -206,7 +282,7 @@ export default {
       this.$refs.form.resetValidation();
     },
 
-    handleCancel() {
+    close() {
       this.name = "";
       this.email = "";
       this.city = "";
@@ -224,6 +300,7 @@ export default {
         this.$refs.form.resetValidation();
       }
       this.dialogVisible = true;
+      this.isSubmitDisabled = true;
       this.submitButtonLabel = "Salvar";
     },
 
@@ -234,79 +311,87 @@ export default {
       this.city = user.cidade;
       this.address = user.endereco;
       this.dialogVisible = true;
+      this.isSubmitDisabled = true;
       this.submitButtonLabel = "Atualizar";
     },
-
     async submitAction() {
-      const userData = {
-        nome: this.name,
-        email: this.email,
-        cidade: this.city,
-        endereco: this.address,
-      };
-      if (!this.selectedUserId) {
-        try {
-          const response = await Users.create(userData);
-          this.fetchUser.push({ id: response.data.id, ...userData });
-          Swal.fire({
-            icon: "success",
-            title: "Usuário adicionado com Sucesso!",
-            showConfirmButton: false,
-            timer: 2000,
-            toast: true,
-            position: "top-end",
-            timerProgressBar: true,
-          });
-          this.handleCancel();
-          this.fetchUsers();
-        } catch (error) {
-          Swal.fire({
-            icon: "error",
-            title: "Erro ao adicionar Usuário",
-            text: error.response.data.error,
-            showConfirmButton: false,
-            toast: true,
-            position: "top-end",
-            timer: 3000,
-            timerProgressBar: true,
-          });
+      if (this.$refs.form && typeof this.$refs.form.validate === "function") {
+        const isFormValid = await this.$refs.form.validate();
+        if (!isFormValid) {
+          this.isSubmitDisabled = false;
+          return;
         }
-      } else {
-        const updateUser = {
-          id: this.selectedUserId,
-          ...userData,
+        const userData = {
+          nome: this.name,
+          email: this.email,
+          cidade: this.city,
+          endereco: this.address,
         };
-        try {
-          await Users.update(updateUser);
-          this.fetchUser = this.fetchUser.map((user) => {
-            if (user.id === updateUser.id) {
-              return updateUser;
-            } else {
-              return user;
-            }
-          });
-          Swal.fire({
-            icon: "success",
-            title: "Usuário atualizado com Sucesso!",
-            showConfirmButton: false,
-            timer: 2000,
-            toast: true,
-            position: "top-end",
-            timerProgressBar: true,
-          });
-          this.handleCancel();
-          this.fetchUsers();
-        } catch (error) {
-          Swal.fire({
-            icon: "error",
-            title: "Erro ao atualizar Usuário",
-            text: error.response.data.error,
-            showConfirmButton: false,
-            toast: true,
-            position: "top-end",
-            timer: 3000,
-            timerProgressBar: true,
-          });
+
+        if (!this.selectedUserId) {
+          try {
+            const response = await Users.create(userData);
+            this.listUser.push({ id: response.data.id, ...userData });
+            this.close();
+            this.listUsers();
+            Swal.fire({
+              icon: "success",
+              title: "Usuário adicionado com Sucesso!",
+              showConfirmButton: false,
+              timer: 2000,
+              toast: true,
+              position: "top-end",
+              timerProgressBar: true,
+            });
+          } catch (error) {
+            Swal.fire({
+              icon: "error",
+              title: "Erro ao adicionar Usuário",
+              text: error.response.data.error,
+              showConfirmButton: false,
+              toast: true,
+              position: "top-end",
+              timer: 3000,
+              timerProgressBar: true,
+            });
+          }
+        } else {
+          const updateUser = {
+            id: this.selectedUserId,
+            ...userData,
+          };
+          try {
+            await Users.update(updateUser);
+            this.listUser = this.listUser.map((user) => {
+              if (user.id === updateUser.id) {
+                return updateUser;
+              } else {
+                return user;
+              }
+            });
+            Swal.fire({
+              icon: "success",
+              title: "Usuário atualizado com Sucesso!",
+              showConfirmButton: false,
+              timer: 2000,
+              toast: true,
+              position: "top-end",
+              timerProgressBar: true,
+            });
+            this.close();
+            this.listUsers();
+          } catch (error) {
+            Swal.fire({
+              icon: "error",
+              title: "Erro ao atualizar Usuário",
+              text: error.response.data.error,
+              showConfirmButton: false,
+              toast: true,
+              position: "top-end",
+              timer: 3000,
+              timerProgressBar: true,
+            });
+          }
         }
       }
     },
@@ -327,6 +412,8 @@ export default {
       if (result.isConfirmed) {
         try {
           await Users.delete(user);
+          this.close();
+          this.listUsers();
           Swal.fire({
             icon: "success",
             title: "Usuário Excluído com Sucesso!",
@@ -336,8 +423,6 @@ export default {
             position: "top-end",
             timerProgressBar: true,
           });
-          this.handleCancel();
-          this.fetchUsers();
         } catch (error) {
           Swal.fire({
             icon: "error",

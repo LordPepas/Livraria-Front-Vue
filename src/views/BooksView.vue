@@ -3,31 +3,65 @@
     <v-container>
       <v-row class="d-flex align-center" xs="vertical-center">
         <v-col cols="auto" class="ml-2">
-          <v-toolbar-title class="font-weight-medium" style="font-size: 30px">Livros</v-toolbar-title>
+          <v-toolbar-title class="font-weight-medium" style="font-size: 30px"
+            >Livros</v-toolbar-title
+          >
         </v-col>
         <v-col cols="auto">
-          <img src="@/assets/divider.svg">
+          <img src="@/assets/divider.svg" />
         </v-col>
         <v-col cols="">
-          <v-btn class="rounded-lg px-0 v-btn v-btn--has-bg theme--dark" color="blue darken-3"
-            style="height: 40px; min-width: 40px" @click="openModalCreate">
+          <v-btn
+            class="rounded-lg px-0 v-btn v-btn--has-bg theme--dark"
+            color="blue darken-3"
+            style="height: 40px; min-width: 40px"
+            @click="openModalCreate"
+          >
             <img src="@/assets/plus.svg" />
           </v-btn>
         </v-col>
-        <v-col cols="12" xs="12" sm="5" md="6" lg="6" class="mr-auto ml-auto mr-sm-2 mb-n6">
-          <v-text-field dense outlined v-model="search" label="Pesquisar" prepend-inner-icon="mdi-magnify"></v-text-field>
+        <v-col
+          cols="12"
+          xs="12"
+          sm="5"
+          md="6"
+          lg="6"
+          class="mr-auto ml-auto mr-sm-2 mb-n6"
+        >
+          <v-text-field
+            dense
+            outlined
+            v-model="search"
+            label="Pesquisar"
+            prepend-inner-icon="mdi-magnify"
+          ></v-text-field>
         </v-col>
       </v-row>
-      
-      <v-data-table :headers="headers" :items="filteredBooks" :sort-by="['id']" :sort-desc="[false, true]" multi-sort
-        :items-per-page="itemsPerPage" :footer-props="{
+
+      <v-data-table
+        :headers="headers"
+        :items="filteredBooks"
+        :sort-by="['id']"
+        :sort-desc="[false, true]"
+        multi-sort
+        :items-per-page="itemsPerPage"
+        :footer-props="{
           itemsPerPageOptions: [5, 10, 25, 50],
           itemsPerPageText: 'Linhas por página',
-        }" mobile-breakpoint="820" class="align-center px-4 py-4" no-data-text="Nenhum Livro encontrado">
+        }"
+        mobile-breakpoint="820"
+        class="align-center px-4 py-4"
+        no-data-text="Nenhum Livro encontrado"
+      >
         <template v-slot:[`item.actions`]="{ item }">
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
-              <v-icon variant="plain" color="info" @click="openModalUpdate(item)" v-on="on">
+              <v-icon
+                variant="plain"
+                color="info"
+                @click="openModalUpdate(item)"
+                v-on="on"
+              >
                 mdi-notebook-edit-outline
               </v-icon>
             </template>
@@ -36,7 +70,12 @@
 
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
-              <v-icon variant="plain" color="error" @click="openModalDelete(item)" v-on="on">
+              <v-icon
+                variant="plain"
+                color="error"
+                @click="openModalDelete(item)"
+                v-on="on"
+              >
                 mdi-trash-can-outline
               </v-icon>
             </template>
@@ -55,24 +94,64 @@
             </v-card-title>
             <v-card-text>
               <v-form ref="form" @submit.prevent="submitAction">
-                <v-text-field v-model="name" :rules="nameRules" :counter="45" label="Título do livro"
-                  append-icon="mdi-book-open-page-variant" required></v-text-field>
-                <v-text-field v-model="author" :rules="authorRules" :counter="45" label="Autor" append-icon="mdi-account"
-                  required></v-text-field>
-                <v-autocomplete v-model="publishers" :rules="publishersRules" :items="listPublishers" item-text="nome"
-                  label="Editora do Livro" append-icon="mdi-bookshelf" required
-                  no-data-text="Nenhuma editora encontrado"></v-autocomplete>
-                <v-text-field v-model="launch" :rules="launchRules" label="Data de lançamento" :counter="4" type="number"
-                  append-icon="mdi-calendar" required></v-text-field>
-                <v-text-field v-model="quantity" :rules="quantityRules" label="Quantidade de livros" :counter="100"
-                  type="number" append-icon="mdi-book-multiple-outline" required></v-text-field>
+                <v-text-field
+                  v-model="name"
+                  :rules="nameRules"
+                  :counter="45"
+                  label="Título do livro"
+                  append-icon="mdi-book-open-page-variant"
+                  required
+                ></v-text-field>
+                <v-text-field
+                  v-model="author"
+                  :rules="authorRules"
+                  :counter="45"
+                  label="Autor"
+                  append-icon="mdi-account"
+                  required
+                ></v-text-field>
+                <v-autocomplete
+                  v-model="publishers"
+                  :rules="publishersRules"
+                  :items="listPublishers"
+                  item-text="nome"
+                  label="Editora do Livro"
+                  append-icon="mdi-bookshelf"
+                  required
+                  no-data-text="Nenhuma editora encontrado"
+                ></v-autocomplete>
+                <v-text-field
+                  v-model="launch"
+                  :rules="launchRules"
+                  label="Data de lançamento"
+                  :counter="4"
+                  type="number"
+                  append-icon="mdi-calendar"
+                  required
+                ></v-text-field>
+                <v-text-field
+                  v-model="quantity"
+                  :rules="quantityRules"
+                  label="Quantidade de livros"
+                  :counter="100"
+                  type="number"
+                  append-icon="mdi-book-multiple-outline"
+                  required
+                ></v-text-field>
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn class="mr-2" type="submit" :disabled="!$refs.form || !$refs.form.validate()" color="primary"
-                    text>
+                  <v-btn
+                    class="mr-2"
+                    type="submit"
+                    :disabled="!isSubmitDisabled"
+                    color="primary"
+                    text
+                  >
                     {{ submitButtonLabel }}
                   </v-btn>
-                  <v-btn class="" @click="close" color="error" text>Cancelar</v-btn>
+                  <v-btn class="" @click="close" color="error" text
+                    >Cancelar</v-btn
+                  >
                 </v-card-actions>
               </v-form>
             </v-card-text>
@@ -92,6 +171,7 @@ export default {
   data() {
     return {
       fetchBook: [],
+      listPublishers: [],
       search: "",
       name: "",
       publishers: "",
@@ -101,7 +181,7 @@ export default {
       dialogVisible: false,
       submitButtonLabel: "",
       selectedBookId: null,
-      listPublishers: [],
+      isSubmitDisabled: true,
       headers: [
         {
           text: "ID",
@@ -235,7 +315,8 @@ export default {
     },
 
     close() {
-      (this.selectedBookId = null), (this.name = "");
+      this.selectedBookId = null,
+      this.name = "";
       this.author = "";
       this.publishers = "";
       this.launch = "";
@@ -252,11 +333,13 @@ export default {
         this.$refs.form.resetValidation();
       }
       this.dialogVisible = true;
+      this.isSubmitDisabled = true;
       this.submitButtonLabel = "Salvar";
     },
 
     openModalUpdate(book) {
       this.dialogVisible = true;
+      this.isSubmitDisabled = true;
       this.submitButtonLabel = "Atualizar";
       this.selectedBookId = book.id;
       this.name = book.nome;
@@ -273,110 +356,105 @@ export default {
     async submitAction() {
       if (this.$refs.form && typeof this.$refs.form.validate === "function") {
         const isFormValid = await this.$refs.form.validate();
-
-        if (isFormValid) {
-          try {
-            const selectedPublisher = this.listPublishers.find(
-              (publisher) => publisher.nome === this.publishers
-            );
-
-            const bookData = {
-              nome: this.name,
-              autor: this.author,
-              editora: selectedPublisher
-                ? { id: selectedPublisher.id, nome: selectedPublisher.nome }
-                : this.publishers,
-              lancamento: this.launch,
-              quantidade: this.quantity,
-            };
-
-            if (!this.selectedBookId) {
-              try {
-                const response = await Books.create(bookData);
-                this.fetchBook.push({ id: response.data.id, ...bookData });
-                Swal.fire({
-                  icon: "success",
-                  title: "Livro adicionado com Sucesso!",
-                  showConfirmButton: false,
-                  timer: 2000,
-                  toast: true,
-                  position: "top-end",
-                  timerProgressBar: true,
-                });
-                this.close();
-                this.listBooks();
-              } catch (error) {
-                Swal.fire({
-                  icon: "error",
-                  title: "Erro ao adicionar Livro",
-                  text: error.response.data.error,
-                  showConfirmButton: false,
-                  toast: true,
-                  position: "top-end",
-                  timer: 3000,
-                  timerProgressBar: true,
-                });
-              }
-            } else {
-              const totalalugado = this.fetchBook.find(
-                (publisher) => publisher.id === this.selectedBookId
-              );
-              const update = {
-                id: this.selectedBookId,
-                ...bookData,
-                totalalugado: totalalugado.totalalugado,
-              };
-              try {
-                await Books.update(update);
-                this.fetchBook = this.fetchBook.map((book) => {
-                  if (book.id === update.id) {
-                    return { ...book, ...update };
-                  } else {
-                    return book;
-                  }
-                });
-                Swal.fire({
-                  icon: "success",
-                  title: "Livro atualizado com Sucesso!",
-                  showConfirmButton: false,
-                  timer: 2000,
-                  toast: true,
-                  position: "top-end",
-                  timerProgressBar: true,
-                });
-                this.close();
-                this.listBooks();
-              } catch (error) {
-                Swal.fire({
-                  icon: "error",
-                  title: "Erro ao atualizar Livro",
-                  text: error.response.data.error,
-                  showConfirmButton: false,
-                  toast: true,
-                  position: "top-end",
-                  timer: 3000,
-                  timerProgressBar: true,
-                });
-              }
-            }
-          } catch (error) {
-            console.error("Erro ao realizar ação:", error);
-            Swal.fire({
-              icon: "error",
-              title: "Erro ao realizar ação",
-              text: error.response.data.error,
-              showConfirmButton: false,
-              toast: true,
-              position: "top-end",
-              timer: 3000,
-              timerProgressBar: true,
-            });
-          }
-        } else {
-          console.warn("Form validation failed.");
+        if (!isFormValid) {
+          this.isSubmitDisabled = false
+          return;
         }
-      } else {
-        console.warn("$refs.form or validate method not available.");
+        const selectedPublisher = this.listPublishers.find(
+          (publisher) => publisher.nome === this.publishers
+        );
+
+        const bookData = {
+          nome: this.name,
+          autor: this.author,
+          editora: selectedPublisher
+            ? { id: selectedPublisher.id, nome: selectedPublisher.nome }
+            : this.publishers,
+          lancamento: this.launch,
+          quantidade: this.quantity,
+        };
+        try {
+          if (!this.selectedBookId) {
+            try {
+              const response = await Books.create(bookData);
+              this.fetchBook.push({ id: response.data.id, ...bookData });
+              this.close();
+              this.listBooks();
+              Swal.fire({
+                icon: "success",
+                title: "Livro adicionado com Sucesso!",
+                showConfirmButton: false,
+                timer: 2000,
+                toast: true,
+                position: "top-end",
+                timerProgressBar: true,
+              });
+            } catch (error) {
+              Swal.fire({
+                icon: "error",
+                title: "Erro ao adicionar Livro",
+                text: error.response.data.error,
+                showConfirmButton: false,
+                toast: true,
+                position: "top-end",
+                timer: 3000,
+                timerProgressBar: true,
+              });
+            }
+          } else {
+            const totalalugado = this.fetchBook.find(
+              (publisher) => publisher.id === this.selectedBookId
+            );
+            const update = {
+              id: this.selectedBookId,
+              ...bookData,
+              totalalugado: totalalugado.totalalugado,
+            };
+            try {
+              this.close();
+              this.listBooks();
+              await Books.update(update);
+              this.fetchBook = this.fetchBook.map((book) => {
+                if (book.id === update.id) {
+                  return { ...book, ...update };
+                } else {
+                  return book;
+                }
+              });
+              Swal.fire({
+                icon: "success",
+                title: "Livro atualizado com Sucesso!",
+                showConfirmButton: false,
+                timer: 2000,
+                toast: true,
+                position: "top-end",
+                timerProgressBar: true,
+              });
+            } catch (error) {
+              Swal.fire({
+                icon: "error",
+                title: "Erro ao atualizar Livro",
+                text: error.response.data.error,
+                showConfirmButton: false,
+                toast: true,
+                position: "top-end",
+                timer: 3000,
+                timerProgressBar: true,
+              });
+            }
+          }
+        } catch (error) {
+          Swal.fire({
+            icon: "error",
+            title: "Erro ao realizar ação",
+            text: error.response.data.error,
+            showConfirmButton: false,
+            toast: true,
+            position: "top-end",
+            timer: 3000,
+            timerProgressBar: true,
+          });
+        }
       }
     },
 
@@ -393,7 +471,6 @@ export default {
         quantidade: book.quantidade,
         totalalugado: book.totalalugado,
       };
-      console.log(deleteBook);
       const result = await Swal.fire({
         icon: "warning",
         title: `Deseja excluir o Livro</br> ${deleteBook.nome} ? `,
@@ -436,17 +513,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-@media (max-width: 1600px) {
-
-  ::v-deep .v-data-table>.v-data-table__wrapper>table>tbody>tr>td,
-  ::v-deep .v-data-table>.v-data-table__wrapper>table>tbody>tr>th,
-  ::v-deep .v-data-table>.v-data-table__wrapper>table>thead>tr>td,
-  ::v-deep .v-data-table>.v-data-table__wrapper>table>thead>tr>th,
-  ::v-deep .v-data-table>.v-data-table__wrapper>table>tfoot>tr>td,
-  ::v-deep .v-data-table>.v-data-table__wrapper>table>tfoot>tr>th {
-    padding: 0px 4px !important;
-  }
-}
-</style>

@@ -3,7 +3,7 @@
     <v-app-bar app height="80px">
       <v-app-bar-nav-icon @click="toggleMenu"></v-app-bar-nav-icon>
       <v-toolbar-title class="text-uppercase ml-n5">
-        <v-img src="/altis_logo.png" width="40%" class=""></v-img>
+        <v-img src="/altis_logo.png" width="40%"></v-img>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-menu offset-y>

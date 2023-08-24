@@ -40,23 +40,13 @@ export default {
 
 <style>
 .crud {
-  width: 80vw;
+  width: 75vw;
   margin: auto;
   margin-top: 30px;
 }
-.header {
-  display: flex;
-  align-items: center;
-}
-@media (max-width: 600px) {
-  .header {
-    display: flex;
-    margin: auto;
-  }
-}
-@media (max-width: 1800px) {
+@media (max-width: 1700px) {
   .crud {
-    width: 90vw;
+    width: 80vw;
   }
 }
 </style>
