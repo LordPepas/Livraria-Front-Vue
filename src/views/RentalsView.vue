@@ -213,13 +213,13 @@
                   <v-btn
                     class="mr-2"
                     type="submit"
-                    :disabled="!isSubmitDisabled"
+                    :disabled="!isSubmitDisabled && !$refs.form.validate()"
                     color="primary"
                     text
                   >
                     Salvar
                   </v-btn>
-                  <v-btn class="" @click="handleCancel" color="error" text
+                  <v-btn class="" @click="closeModal" color="error" text
                     >Cancelar</v-btn
                   >
                 </v-card-actions>
@@ -444,7 +444,7 @@ export default {
       this.$refs.form.resetValidation();
     },
 
-    handleCancel() {
+    closeModal() {
       this.previsaoDate = this.date2;
       (this.selectedBook = ""),
         (this.selectedUser = ""),
@@ -470,7 +470,7 @@ export default {
       if (this.$refs.form && typeof this.$refs.form.validate === "function") {
         const isFormValid = await this.$refs.form.validate();
         if (!isFormValid) {
-          this.isSubmitDisabled = false
+          this.isSubmitDisabled = false;
           return;
         }
         try {
@@ -492,7 +492,7 @@ export default {
             ...newRental,
           });
           this.listRent();
-          this.handleCancel();
+          this.closeModal();
           Swal.fire({
             icon: "success",
             title: "Aluguel adicionado com Sucesso!",
@@ -636,7 +636,7 @@ export default {
             }
           });
           this.listRent();
-          this.handleCancel();
+          this.closeModal();
           await Swal.fire({
             icon: "success",
             title: "Livro Devolvido com Sucesso!",

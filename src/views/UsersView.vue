@@ -139,13 +139,13 @@
                   <v-btn
                     class="mr-2"
                     type="submit"
-                    :disabled="!isSubmitDisabled"
+                    :disabled="!isSubmitDisabled  && !$refs.form.validate()"
                     color="primary"
                     text
                   >
                     {{ submitButtonLabel }}
                   </v-btn>
-                  <v-btn class="" @click="close" color="error" text
+                  <v-btn class="" @click="closeModal" color="error" text
                     >Cancelar</v-btn
                   >
                 </v-card-actions>
@@ -282,7 +282,7 @@ export default {
       this.$refs.form.resetValidation();
     },
 
-    close() {
+    closeModal() {
       this.name = "";
       this.email = "";
       this.city = "";
@@ -332,7 +332,7 @@ export default {
           try {
             const response = await Users.create(userData);
             this.listUser.push({ id: response.data.id, ...userData });
-            this.close();
+            this.closeModal();
             this.listUsers();
             Swal.fire({
               icon: "success",
@@ -378,7 +378,7 @@ export default {
               position: "top-end",
               timerProgressBar: true,
             });
-            this.close();
+            this.closeModal();
             this.listUsers();
           } catch (error) {
             Swal.fire({
@@ -412,7 +412,7 @@ export default {
       if (result.isConfirmed) {
         try {
           await Users.delete(user);
-          this.close();
+          this.closeModal();
           this.listUsers();
           Swal.fire({
             icon: "success",

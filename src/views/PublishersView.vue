@@ -122,13 +122,13 @@
                   <v-btn
                     class="mr-2"
                     type="submit"
-                    :disabled="!isSubmitDisabled"
+                    :disabled="!isSubmitDisabled && !$refs.form.validate()"
                     color="primary"
                     text
                   >
                     {{ submitButtonLabel }}
                   </v-btn>
-                  <v-btn class="" @click="close" color="error" text
+                  <v-btn class="" @click="closeModal" color="error" text
                     >Cancelar</v-btn
                   >
                 </v-card-actions>
@@ -240,7 +240,7 @@ export default {
       this.$refs.form.resetValidation();
     },
 
-    close() {
+    closeModal() {
       this.selectedPublisherId = null;
       this.name = "";
       this.city = "";
@@ -296,7 +296,7 @@ export default {
               position: "top-end",
               timerProgressBar: true,
             });
-            this.close();
+            this.closeModal();
             this.listPublishers();
           } catch (error) {
             Swal.fire({
@@ -333,7 +333,7 @@ export default {
               position: "top-end",
               timerProgressBar: true,
             });
-            this.close();
+            this.closeModal();
             this.listPublishers();
           } catch (error) {
             Swal.fire({
@@ -367,7 +367,7 @@ export default {
       if (result.isConfirmed) {
         try {
           await Publisher.delete(publisher);
-          this.close();
+          this.closeModal();
           this.listPublishers();
           await Swal.fire({
             icon: "success",

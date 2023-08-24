@@ -143,13 +143,13 @@
                   <v-btn
                     class="mr-2"
                     type="submit"
-                    :disabled="!isSubmitDisabled"
+                    :disabled="!isSubmitDisabled && !$refs.form.validate()"
                     color="primary"
                     text
                   >
                     {{ submitButtonLabel }}
                   </v-btn>
-                  <v-btn class="" @click="close" color="error" text
+                  <v-btn class="" @click="closeModal" color="error" text
                     >Cancelar</v-btn
                   >
                 </v-card-actions>
@@ -314,9 +314,8 @@ export default {
       this.$refs.form.resetValidation();
     },
 
-    close() {
-      this.selectedBookId = null,
-      this.name = "";
+    closeModal() {
+      (this.selectedBookId = null), (this.name = "");
       this.author = "";
       this.publishers = "";
       this.launch = "";
@@ -357,7 +356,7 @@ export default {
       if (this.$refs.form && typeof this.$refs.form.validate === "function") {
         const isFormValid = await this.$refs.form.validate();
         if (!isFormValid) {
-          this.isSubmitDisabled = false
+          this.isSubmitDisabled = false;
           return;
         }
         const selectedPublisher = this.listPublishers.find(
@@ -378,7 +377,7 @@ export default {
             try {
               const response = await Books.create(bookData);
               this.fetchBook.push({ id: response.data.id, ...bookData });
-              this.close();
+              this.closeModal();
               this.listBooks();
               Swal.fire({
                 icon: "success",
@@ -411,7 +410,7 @@ export default {
               totalalugado: totalalugado.totalalugado,
             };
             try {
-              this.close();
+              this.closeModal();
               this.listBooks();
               await Books.update(update);
               this.fetchBook = this.fetchBook.map((book) => {
@@ -483,6 +482,8 @@ export default {
       });
 
       if (result.isConfirmed) {
+        this.listBooks();
+        this.closeModal();
         try {
           await Books.delete(deleteBook);
           await Swal.fire({
@@ -494,8 +495,6 @@ export default {
             position: "top-end",
             timerProgressBar: true,
           });
-          this.listBooks();
-          this.close();
         } catch (error) {
           await Swal.fire({
             icon: "info",
