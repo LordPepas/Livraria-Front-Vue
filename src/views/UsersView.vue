@@ -8,14 +8,7 @@
           >
         </v-col>
         <v-col cols="auto">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 3 55"
-            width="16"
-            height="55"
-          >
-            <rect width="3" height="55" rx="1"></rect>
-          </svg>
+          <img src="@/assets/divider.svg" />
         </v-col>
         <v-col cols="auto">
           <v-btn
@@ -139,7 +132,7 @@
                   <v-btn
                     class="mr-2"
                     type="submit"
-                    :disabled="!isSubmitDisabled  && !$refs.form.validate()"
+                    :disabled="!isSubmitDisabled && !$refs.form.validate()"
                     color="primary"
                     text
                   >
