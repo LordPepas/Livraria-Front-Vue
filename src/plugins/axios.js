@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const http = axios.create({
-  baseURL: "http://wdaw.hopto.org:8185/api/",
+  baseURL: "https://livraria-api-linux.altislabtech.com.br/swagger-ui.html/api/",
 });
 
 export default http;
